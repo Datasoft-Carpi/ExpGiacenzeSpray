@@ -3032,6 +3032,7 @@ Public Class FormMain
         Dim MaxWidth As Integer = 0
 
 
+
         Dim xlApp As Excel.Application
         Dim xlWorkBook As Excel.Workbook
         Dim xlWorkSheet As Excel.Worksheet
@@ -3059,7 +3060,7 @@ Public Class FormMain
 
         Catch ex As Exception
 
-
+            MsgBox(ex.Message)
             MsgBox("Non è stata riscontrata l'installazione di Excel sul PC o la versione non è compatibile - verificare")
             Return
         End Try

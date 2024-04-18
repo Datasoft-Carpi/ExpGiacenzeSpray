@@ -362,6 +362,7 @@ Partial Class FormExport
         'CheckBoxLingua
         '
         Me.CheckBoxLingua.AutoSize = True
+        Me.CheckBoxLingua.Enabled = False
         Me.CheckBoxLingua.Location = New System.Drawing.Point(13, 230)
         Me.CheckBoxLingua.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBoxLingua.Name = "CheckBoxLingua"
