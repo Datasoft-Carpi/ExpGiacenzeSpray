@@ -170,8 +170,4 @@ Public Class FormExport
 
     End Sub
 
-    Private Sub TextBoxDispTeorica_TextChanged(sender As Object, e As EventArgs) Handles TextBoxDispTeorica.TextChanged
-
-    End Sub
-
 End Class

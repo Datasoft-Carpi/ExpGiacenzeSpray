@@ -258,7 +258,7 @@ Public Class FormMain
             SQL = SQL & " ArtAnagrafica.CodArt AS [CodArticolo], "
             SQL = SQL & " ArtAnagrafica.StatoArt AS [StatoArt], "
             SQL = SQL & " ArtAnagrafica.MagUm AS [MagUm], "
-            SQL = SQL & " ArtAnagrafica.DesArt AS [DesArt], "
+            SQL = SQL & " ArtAnagrafica.RicercaAlternativa AS [DesArt], "
             SQL = SQL & " ArtAnagrafica.DesEstesa AS [DesEstesa], "
             SQL = SQL & " ArtAnagrafica.CodFamiglia AS [CodFamiglia], "
             SQL = SQL & " ArtAnagrafica.CodMarca AS [CodMarca], "
@@ -294,7 +294,7 @@ Public Class FormMain
             SQL = SQL & " LEFT OUTER JOIN ModaTabComposizioni As [ModaTabComposizioni1] On (ModaTabComposizioni1.CodiceComposizione=ModaArticoli.CodComposizione1 And (ModaTabComposizioni1.DBGruppo=ModaArticoli.DBGruppo))"
             SQL = SQL & " LEFT OUTER JOIN ModaTabComposizioni As [ModaTabComposizioni2] On (ModaTabComposizioni2.CodiceComposizione=ModaArticoli.CodComposizione2 And (ModaTabComposizioni2.DBGruppo=ModaArticoli.DBGruppo))"
 
-            SQL = SQL & " LEFT OUTER JOIN ArtDatiInLingua As [ArtDatiInLingua] On (ArtDatiInLingua.CodArt=ArtAnagrafica.CodArt And ArtDatiInLingua.VarianteArt = '' And ArtDatiInLingua.CodLingua = 1 And (ArtDatiInLingua.DBGruppo=ArtAnagrafica.DBGruppo))"
+            SQL = SQL & " LEFT OUTER JOIN ArtDatiInLingua As [ArtDatiInLingua] On (ArtDatiInLingua.CodArt=ArtAnagrafica.CodArt And ArtDatiInLingua.VarianteArt = '' And ArtDatiInLingua.CodLingua = 5 And (ArtDatiInLingua.DBGruppo=ArtAnagrafica.DBGruppo))"
 
             SQL = SQL & " LEFT OUTER JOIN Marche As [Marche] On (ArtAnagrafica.CodMarca = Marche.CodMarca And (Marche.DBGruppo=ArtAnagrafica.DBGruppo)) "
             SQL = SQL & " LEFT OUTER JOIN ModaTabellaLinee As [ModaTabellaLinee] On (ModaArticoli.CodLinea = ModaTabellaLinee.CodiceLinea And (ModaArticoli.DBGruppo=ModaTabellaLinee.DBGruppo)) "
@@ -378,7 +378,7 @@ Public Class FormMain
 
             currentUM = rsGlobale.Fields("MagUM").Value
 
-            currentDescEstesa = rsGlobale.Fields("CodArticolo").Value & " - " & getDbNullStr(rsGlobale.Fields("DescrizioneInglese").Value) & vbCrLf
+            currentDescEstesa = rsGlobale.Fields("CodArticolo").Value & " - " & getDbNullStr(rsGlobale.Fields("DesEstesa").Value) & vbCrLf
             If rsGlobale.Fields("CodStagione").Value <> "" Then
                 currentDescEstesa = currentDescEstesa & "Stag: " & rsGlobale.Fields("CodStagione").Value & " - " & lookupStagione(rsGlobale.Fields("CodStagione").Value) & vbCrLf
             End If
@@ -444,7 +444,7 @@ Public Class FormMain
 
                 ' compila la struttura per i filtri al primo giro
                 If PrimoGiro = True Then
-                    Call AddArticoloInList(rsGlobale.Fields("CodArticolo").Value, getDbNullStr(rsGlobale.Fields("DescrizioneInglese").Value))
+                    Call AddArticoloInList(rsGlobale.Fields("CodArticolo").Value, getDbNullStr(rsGlobale.Fields("DesEstesa").Value))
                 End If
 
                 'MsgBox("LOAD IMAGE")
@@ -2901,9 +2901,7 @@ Public Class FormMain
         ListFiltriTaglie(UBound(ListFiltriTaglie) - 1).Codice = codTaglia
         ListFiltriTaglie(UBound(ListFiltriTaglie) - 1).visibile = True
 
-
     End Sub
-
 
     Private Function checkVisibilitaTaglia(CodTaglia As String, giacCalcolato As Integer, giacNormale As Integer) As Boolean
         Dim res As Boolean = True
@@ -2921,6 +2919,7 @@ Public Class FormMain
             Next
         End If
         Return res
+
     End Function
 
     Private Sub getAssegnatoTaglie(codArt As String, codVar As String, ByRef assegnato() As Integer)
@@ -2928,7 +2927,6 @@ Public Class FormMain
         Dim rs As New ADODB.Recordset
         Dim res As Integer = 0
         Dim idx As Integer
-
 
         For idx = 1 To 30
             assegnato(idx) = 0
@@ -2942,9 +2940,6 @@ Public Class FormMain
             MsgBox(sql & "    ---SQLASSEGNATOTAGLIE IN GETASSEGNATOTAGLIE")
         End Try
 
-
-
-
         If rs.RecordCount = 1 Then
 
             For idx = 1 To 30
@@ -2954,16 +2949,12 @@ Public Class FormMain
 
         rs.Close()
 
-
     End Sub
-
-
 
     Private Function getSQLAssegnatoTaglie(codArt As String, codVar As String) As String
         Dim SQL As String
 
         SQL = SQL & "Select codArt, VarianteArt,  "
-
 
         SQL = SQL & " sum(QtaTagPrelevata_1)  As tg1, sum(QtaTagPrelevata_2) As tg2, sum(QtaTagPrelevata_3) As tg3,  sum(QtaTagPrelevata_4) As tg4, sum(QtaTagPrelevata_5)As tg5, sum(QtaTagPrelevata_6)As tg6, sum(QtaTagPrelevata_7)As tg7, sum(QtaTagPrelevata_8)As tg8, sum(QtaTagPrelevata_9) As tg9,sum(QtaTagPrelevata_10) As tg10,  "
         SQL = SQL & " sum(QtaTagPrelevata_11) As tg11, sum(QtaTagPrelevata_12) As tg12, sum(QtaTagPrelevata_13) As tg13,  sum(QtaTagPrelevata_14) As tg14, sum(QtaTagPrelevata_15) As tg15, sum(QtaTagPrelevata_16) As tg16, sum(QtaTagDaSpedire_17- QtaTagPrelevata_17) As tg17, sum(QtaTagPrelevata_18) As tg18, sum(QtaTagPrelevata_19) As tg19, sum(QtaTagPrelevata_20) As tg20,  "
@@ -2971,7 +2962,6 @@ Public Class FormMain
 
         SQL = SQL & " From ordSpedRighe   "
         SQL = SQL & "  Left Join ModaSpedTestate on (ModaSpedTestate.IddDoc = OrdSpedRighe.IdDocumento And ModaSpedTestate.DBGruppo = OrdSpedRighe.DBGruppo)  "
-
         SQL = SQL & "  Left Join ModaSpedRighe on (ModaSpedRighe.IddOrdSped = OrdSpedRighe.IdDocumento And ModaSpedRighe.IdrOrdSped = ordSpedRighe.IdRiga And ModaSpedTestate.DBGruppo = OrdSpedRighe.DBGruppo)"
 
         SQL = SQL & " where 1 = 1 "
@@ -2981,8 +2971,6 @@ Public Class FormMain
         SQL = SQL & " And OrdSpedRighe.CodArt = '" & Replace(Trim(codArt), "'", "''") & "' "
         SQL = SQL & " And ordSpedRighe.VarianteArt = '" & codVar & "' "
         SQL = SQL & " group by CodArt, VarianteArt"
-
-
 
         Return SQL
     End Function
@@ -3000,8 +2988,6 @@ Public Class FormMain
         SQL = SQL & " And OrdSpedRighe.CodArt = '" & Replace(Trim(codArt), "'", "''") & "' "
         SQL = SQL & " And ordSpedRighe.VarianteArt = '" & codVar & "' "
         SQL = SQL & " group by CodArt, VarianteArt"
-
-
 
         Return SQL
     End Function
@@ -3086,7 +3072,6 @@ Public Class FormMain
         If SaveFileDialog1.FileName <> "" Then
 
             LabelDB.Text = "Esportazione file excel in corso ...."
-
 
 
             ' data ora esportazione
@@ -3297,9 +3282,6 @@ Public Class FormMain
 
 
                 'idxRow = idxRow + 1
-
-
-
                 '--------------------
                 ' TODO - VERIFICARE  Varianti
                 'html += vbTab + TAG_TABLE_VUOTO + vbNewLine
@@ -3339,11 +3321,8 @@ Public Class FormMain
                         End If
 
 
-
-
                         idxRow = idxRow + 1
                         bEsportaVariante = False
-
 
                         ' TODO - VERIFICARE controlla se mostrare l'immagine variante
                         'If bShowImgVariante = True Then
@@ -3405,58 +3384,59 @@ Public Class FormMain
 
                         If (stampaTestata = True And testgiastampata = False) Then
                             idxRow = idxRow - 1
+                            strvAl = ""
 
 
                             If FormExport.CheckBoxArtCodice.Checked = True Then
                                 If FormExport.CheckBoxLingua.Checked = True Then
-                                    strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescrInglese & vbCrLf
+                                    strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt + " - " + varTag(idxArt).DescrInglese & vbCrLf & vbCrLf
                                 Else
-                                    strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt + " - " + varTag(idxArt).DescEstesa & vbCrLf
+                                    strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt + " - " + varTag(idxArt).DescEstesa & vbCrLf & vbCrLf
                                 End If
                             End If
 
                             'Stagione
                             If FormExport.CheckBoxArtStagione.Checked = True Then
                                 If FormExport.CheckBoxLingua.Checked = True Then
-                                    strvAl += "SEASON: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf
+                                    strvAl += "STAG: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf & vbCrLf
                                 Else
-                                    strvAl += "STAG: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf
+                                    strvAl += "SEASON: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf & vbCrLf
                                 End If
 
                             End If
 
                             'Famiglia
                             If FormExport.CheckBoxArtFamiglia.Checked = True Then
-                                strvAl += "FAM: " + varTag(idxArt).Famiglia & vbCrLf
+                                strvAl += "FAM: " + varTag(idxArt).Famiglia & vbCrLf & vbCrLf
                             End If
 
                             'Famiglia
                             If FormExport.CheckBoxArtComposizione.Checked = True Then
-                                strvAl += "COMP: " + varTag(idxArt).Composizione & vbCrLf
+                                strvAl += "COMP: " + varTag(idxArt).Composizione & vbCrLf & vbCrLf
                             End If
 
                             'Marca
                             If FormExport.CheckBoxMarca.Checked = True Then
                                 If FormExport.CheckBoxLingua.Checked = True Then
-                                    strvAl += "LINE: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf
+                                    strvAl += "LINEA: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
                                 Else
-                                    strvAl += "LINEA: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf
+                                    strvAl += "LINE: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
                                 End If
                             End If
 
                             'Nomenclatura
                             If FormExport.CheckBoxCodNomenclatura.Checked = True Then
                                 If FormExport.CheckBoxLingua.Checked = True Then
-                                    strvAl += "HS CODE: " + varTag(idxArt).CodNomenclatura & vbCrLf
+                                    strvAl += "COD NOMENCLATURA: " + varTag(idxArt).CodNomenclatura & vbCrLf & vbCrLf
                                 Else
-                                    strvAl += "COD NOMENCLATURA: " + varTag(idxArt).CodNomenclatura & vbCrLf
+                                    strvAl += "HTS CODE: " + varTag(idxArt).CodNomenclatura & vbCrLf & vbCrLf
                                 End If
                             End If
 
                             'MadeIn
                             If versione <> VER_35 Then
                                 If FormExport.CheckBoxMadeIn.Checked = True Then
-                                    strvAl += "MADE IN: " + varTag(idxArt).MadeIn & vbCrLf
+                                    strvAl += "MADE IN: " + varTag(idxArt).MadeIn & vbCrLf & vbCrLf
                                 End If
                             End If
 
@@ -4100,10 +4080,10 @@ Public Class FormMain
         Dim file As String
         Dim shp As Excel.Shape = Nothing
 
-        file = "\\192.168.1.71\sistemi\ESOLVER\IMMAGINI\" + stag + "\" + codArt + "_" + Var + ".png"
+        file = "Z:\varianti colore\" + codArt + "_" + Var + ".jpg"
 
         If System.IO.File.Exists(file) = False Then
-            file = "\\192.168.1.71\sistemi\ESOLVER\IMMAGINI\" + stag + "\" + Var + ".png"
+            file = "Z:\varianti colore\cartella colori\" + Var + ".jpg"
             If System.IO.File.Exists(file) = False Then
                 file = ""
             End If
@@ -4111,7 +4091,7 @@ Public Class FormMain
 
         If file = "" Then
             file = getTmpImagefilename(My.Resources.url, largh, alt)
-        Else
+            'Else
             'file = getTmpImagefilenameFromFile(file, largh, alt)
         End If
 

@@ -362,13 +362,12 @@ Partial Class FormExport
         'CheckBoxLingua
         '
         Me.CheckBoxLingua.AutoSize = True
-        Me.CheckBoxLingua.Enabled = False
         Me.CheckBoxLingua.Location = New System.Drawing.Point(13, 230)
         Me.CheckBoxLingua.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBoxLingua.Name = "CheckBoxLingua"
-        Me.CheckBoxLingua.Size = New System.Drawing.Size(194, 20)
+        Me.CheckBoxLingua.Size = New System.Drawing.Size(241, 25)
         Me.CheckBoxLingua.TabIndex = 20
-        Me.CheckBoxLingua.Text = "Descrizioni in lingua inglese"
+        Me.CheckBoxLingua.Text = "Descrizioni in lingua italiano"
         Me.CheckBoxLingua.UseVisualStyleBackColor = True
         '
         'NumericUpDownMaxQta
