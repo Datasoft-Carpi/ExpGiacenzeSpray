@@ -68,6 +68,7 @@ Public Class FormMain
     Dim MACROFAM_DA = ""
     Dim STAGIONE_DA = ""
     Dim LINEA_DA = ""
+    Dim CODTAG = ""
     Dim CODFOR = "0"
     Dim CODAGE = "0"
     Dim CODZON = ""
@@ -112,6 +113,7 @@ Public Class FormMain
         Public Giacenze() As Integer
         Public Calcolato() As Integer
         Public DispTeorica() As Integer
+        Public TagValide() As Integer
     End Structure
 
     Structure Varianti
@@ -283,6 +285,7 @@ Public Class FormMain
             SQL = SQL & " ArtDatiInLingua.DesEstesa AS [DescrizioneInglese], "
 
             SQL = SQL & " 1 AS [Contatore]"
+            SQL = SQL & ", ArtAnagrafica.StorSostDaCodArt AS [ArticoloSostitutivo] "
             SQL = SQL & " FROM ArtAnagrafica "
             SQL = SQL & " LEFT OUTER JOIN ModaArticoli AS [ModaArticoli] ON (ModaArticoli.CodiceArticolo=ArtAnagrafica.CodArt AND (ModaArticoli.DBGruppo=ArtAnagrafica.DBGruppo))"
             SQL = SQL & " LEFT OUTER JOIN Famiglia AS [Famiglia] ON (Famiglia.CodFamiglia=ArtAnagrafica.CodFamiglia AND (Famiglia.DBGruppo=ArtAnagrafica.DBGruppo))"
@@ -720,6 +723,36 @@ Public Class FormMain
         SQL = SQL & "            ModaTabellaTaglie.CodiciTaglie_28  AS [CodiciTaglie_28],   "
         SQL = SQL & "            ModaTabellaTaglie.CodiciTaglie_29  As [CodiciTaglie_29],   "
         SQL = SQL & "            ModaTabellaTaglie.CodiciTaglie_30  AS [CodiciTaglie_30],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_1  As [FlagTagliaValida_1],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_2  AS [FlagTagliaValida_2],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_3  As [FlagTagliaValida_3],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_4  AS [FlagTagliaValida_4],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_5  As [FlagTagliaValida_5],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_6  AS [FlagTagliaValida_6],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_7  As [FlagTagliaValida_7],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_8  AS [FlagTagliaValida_8],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_9  As [FlagTagliaValida_9],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_10  AS [FlagTagliaValida_10],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_11  As [FlagTagliaValida_11],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_12  AS [FlagTagliaValida_12],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_13  As [FlagTagliaValida_13],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_14  AS [FlagTagliaValida_14],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_15  As [FlagTagliaValida_15],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_16  AS [FlagTagliaValida_16],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_17  As [FlagTagliaValida_17],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_18  AS [FlagTagliaValida_18],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_19  As [FlagTagliaValida_19],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_20  AS [FlagTagliaValida_20],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_21  As [FlagTagliaValida_21],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_22  AS [FlagTagliaValida_22],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_23  As [FlagTagliaValida_23],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_24  AS [FlagTagliaValida_24],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_25  As [FlagTagliaValida_25],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_26  AS [FlagTagliaValida_26],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_27  As [FlagTagliaValida_27],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_28  AS [FlagTagliaValida_28],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_29  As [FlagTagliaValida_29],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_30  AS [FlagTagliaValida_30],   "
         SQL = SQL & "            sum(ModaProgMagCor.GtgQgp1) As [GtgQgp1],                  "
         SQL = SQL & "            sum(ModaProgMagCor.GtgQgp2) As [GtgQgp2],                  "
         SQL = SQL & "            sum(ModaProgMagCor.GtgQgp3) As [GtgQgp3],                  "
@@ -855,9 +888,45 @@ Public Class FormMain
 
         SQL = SQL & " WHERE (ModaProgMagCor.GtgCart = '" & Replace(Trim(codArt), "'", "''") & "') "
         SQL = SQL & " AND (ModaProgMagCor.Gtgcmag in " & CODMAGAZZINO & ")"
+
+        If CODTAG <> "" Then
+            SQL = SQL & "AND ( "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_1 IN ('" + CODTAG + "')  ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_2 IN ('" + CODTAG + "')  ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_3 IN ('" + CODTAG + "')  ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_4 IN ('" + CODTAG + "')  ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_5 IN ('" + CODTAG + "')  ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_6 IN ('" + CODTAG + "')  ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_7 IN ('" + CODTAG + "')  ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_8 IN ('" + CODTAG + "')  ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_9 IN ('" + CODTAG + "')  ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_10 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_11 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_12 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_13 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_14 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_15 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_16 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_17 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_18 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_19 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_20 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_21 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_22 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_23 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_24 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_25 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_26 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_27 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_28 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_29 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_30 IN ('" + CODTAG + "') ) ) "
+        End If
+
         SQL = SQL & " AND (ModaProgMagCor.GtgQgp1+ModaProgMagCor.GtgQgp2+ModaProgMagCor.GtgQgp3+ModaProgMagCor.GtgQgp4+ModaProgMagCor.GtgQgp5+ModaProgMagCor.GtgQgp6+ModaProgMagCor.GtgQgp7+ModaProgMagCor.GtgQgp8+ModaProgMagCor.GtgQgp9+ModaProgMagCor.GtgQgp10+"
         SQL = SQL & "ModaProgMagCor.GtgQgp11+ModaProgMagCor.GtgQgp12+ModaProgMagCor.GtgQgp13+ModaProgMagCor.GtgQgp14+ModaProgMagCor.GtgQgp15+ModaProgMagCor.GtgQgp16+ModaProgMagCor.GtgQgp17+ModaProgMagCor.GtgQgp18+ModaProgMagCor.GtgQgp19+ModaProgMagCor.GtgQgp20+"
         SQL = SQL & "ModaProgMagCor.GtgQgp21+ModaProgMagCor.GtgQgp22+ModaProgMagCor.GtgQgp23+ModaProgMagCor.GtgQgp24+ModaProgMagCor.GtgQgp25+ModaProgMagCor.GtgQgp26+ModaProgMagCor.GtgQgp27+ModaProgMagCor.GtgQgp28+ModaProgMagCor.GtgQgp29+ModaProgMagCor.GtgQgp30) > 0"
+
         SQL = SQL & " AND (ModaProgMagCor.DBGruppo='" & CODGRUPPO & "')"
         SQL = SQL & "            group by GtgCart, GtgVarart, ArtConfigVariante.descrizione, ArtDatiInLingua.DesEstesa, "
         SQL = SQL & "            ModaArticoli.CodiceTabellaTaglie,  "
@@ -890,9 +959,37 @@ Public Class FormMain
         SQL = SQL & "            ModaTabellaTaglie.CodiciTaglie_27, "
         SQL = SQL & "            ModaTabellaTaglie.CodiciTaglie_28, "
         SQL = SQL & "            ModaTabellaTaglie.CodiciTaglie_29, "
-        SQL = SQL & "            ModaTabellaTaglie.CodiciTaglie_30  "
-
-
+        SQL = SQL & "            ModaTabellaTaglie.CodiciTaglie_30,  "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_1, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_2,     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_3,     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_4,     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_5,     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_6, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_7, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_8, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_9, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_10, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_11, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_12, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_13, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_14, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_15, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_16, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_17, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_18, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_19, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_20, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_21, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_22, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_23, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_24, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_25, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_26, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_27, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_28, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_29, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_30 "
 
         Return SQL
     End Function
@@ -939,6 +1036,36 @@ Public Class FormMain
         SQL = SQL & " ModaTabellaTaglie.CodiciTaglie_28 As [CodiciTaglie_28],        "
         SQL = SQL & " ModaTabellaTaglie.CodiciTaglie_29 AS [CodiciTaglie_29],        "
         SQL = SQL & " ModaTabellaTaglie.CodiciTaglie_30 As [CodiciTaglie_30],        "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_1  As [FlagTagliaValida_1],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_2  AS [FlagTagliaValida_2],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_3  As [FlagTagliaValida_3],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_4  AS [FlagTagliaValida_4],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_5  As [FlagTagliaValida_5],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_6  AS [FlagTagliaValida_6],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_7  As [FlagTagliaValida_7],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_8  AS [FlagTagliaValida_8],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_9  As [FlagTagliaValida_9],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_10  AS [FlagTagliaValida_10],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_11  As [FlagTagliaValida_11],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_12  AS [FlagTagliaValida_12],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_13  As [FlagTagliaValida_13],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_14  AS [FlagTagliaValida_14],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_15  As [FlagTagliaValida_15],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_16  AS [FlagTagliaValida_16],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_17  As [FlagTagliaValida_17],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_18  AS [FlagTagliaValida_18],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_19  As [FlagTagliaValida_19],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_20  AS [FlagTagliaValida_20],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_21  As [FlagTagliaValida_21],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_22  AS [FlagTagliaValida_22],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_23  As [FlagTagliaValida_23],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_24  AS [FlagTagliaValida_24],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_25  As [FlagTagliaValida_25],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_26  AS [FlagTagliaValida_26],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_27  As [FlagTagliaValida_27],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_28  AS [FlagTagliaValida_28],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_29  As [FlagTagliaValida_29],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_30  AS [FlagTagliaValida_30],   "
         SQL = SQL & " SUM(JSV_IMPE_AVMA_D.qtimpconf1) As [qtimpconf1],               "
         SQL = SQL & " SUM(JSV_IMPE_AVMA_D.qtimpconf2) As [qtimpconf2],               "
         SQL = SQL & " SUM(JSV_IMPE_AVMA_D.qtimpconf3) As [qtimpconf3],               "
@@ -1031,8 +1158,6 @@ Public Class FormMain
         SQL = SQL & " sum(JSV_IMPORD_AVMA_D.QtaODCUm29) As [QtaODCUm29],             "
         SQL = SQL & " sum(JSV_IMPORD_AVMA_D.QtaODCUm30) As [QtaODCUm30]              "
 
-
-
         SQL = SQL & " FROM ESV_IMPORD_AVMA_S As [ESV_IMPORD_AVMA_S]           "
         SQL = SQL & " LEFT OUTER JOIN JSV_IMPE_AVMA_D As [JSV_IMPE_AVMA_D] On (JSV_IMPE_AVMA_D.codArt=ESV_IMPORD_AVMA_S.codArt And JSV_IMPE_AVMA_D.VarianteArt = ESV_IMPORD_AVMA_S.VarianteArt And JSV_IMPE_AVMA_D.CodMag = ESV_IMPORD_AVMA_S.codMag And JSV_IMPE_AVMA_D.DBGruppo=ESV_IMPORD_AVMA_S.DBGruppo)"
 
@@ -1046,12 +1171,78 @@ Public Class FormMain
 
         SQL = SQL & " WHERE (JSV_IMPE_AVMA_D.CodArt = '" & Replace(Trim(codArt), "'", "''") & "')"
         SQL = SQL & " AND (JSV_IMPE_AVMA_D.codmag in " & CODMAGAZZINO & ")"
+
+        If CODTAG <> "" Then
+            SQL = SQL & "AND ( "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_1 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_2 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_3 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_4 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_5 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_6 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_7 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_8 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_9 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_10 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_11 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_12 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_13 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_14 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_15 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_16 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_17 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_18 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_19 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_20 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_21 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_22 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_23 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_24 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_25 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_26 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_27 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_28 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_29 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_30 IN ('" + CODTAG + "') ) ) "
+
+        End If
+
         SQL = SQL & " AND (JSV_IMPE_AVMA_D.DBGruppo='" & CODGRUPPO & "')   "
 
         SQL = SQL & " group by ESV_IMPORD_AVMA_S.qtordUm, ESV_IMPORD_AVMA_S.qtimpum, JSV_IMPE_AVMA_D.codArt, JSV_IMPE_AVMA_D.VarianteArt, ArtConfigVariante.descrizione, ArtDatiInLingua.DesEstesa, "
         SQL = SQL & " ModaArticoli.CodiceTabellaTaglie, ModaTabellaTaglie.CodiciTaglie_1, ModaTabellaTaglie.CodiciTaglie_2, ModaTabellaTaglie.CodiciTaglie_3, ModaTabellaTaglie.CodiciTaglie_4, ModaTabellaTaglie.CodiciTaglie_5, ModaTabellaTaglie.CodiciTaglie_6, ModaTabellaTaglie.CodiciTaglie_7, ModaTabellaTaglie.CodiciTaglie_8, ModaTabellaTaglie.CodiciTaglie_9, ModaTabellaTaglie.CodiciTaglie_10,"
         SQL = SQL & " ModaTabellaTaglie.CodiciTaglie_11, ModaTabellaTaglie.CodiciTaglie_12, ModaTabellaTaglie.CodiciTaglie_13, ModaTabellaTaglie.CodiciTaglie_14, ModaTabellaTaglie.CodiciTaglie_15, ModaTabellaTaglie.CodiciTaglie_16, ModaTabellaTaglie.CodiciTaglie_17, ModaTabellaTaglie.CodiciTaglie_18, ModaTabellaTaglie.CodiciTaglie_19, ModaTabellaTaglie.CodiciTaglie_20, ModaTabellaTaglie.CodiciTaglie_21,"
-        SQL = SQL & " ModaTabellaTaglie.CodiciTaglie_22, ModaTabellaTaglie.CodiciTaglie_23, ModaTabellaTaglie.CodiciTaglie_24, ModaTabellaTaglie.CodiciTaglie_25, ModaTabellaTaglie.CodiciTaglie_26, ModaTabellaTaglie.CodiciTaglie_27, ModaTabellaTaglie.CodiciTaglie_28, ModaTabellaTaglie.CodiciTaglie_29, ModaTabellaTaglie.CodiciTaglie_30                                                                        "
+        SQL = SQL & " ModaTabellaTaglie.CodiciTaglie_22, ModaTabellaTaglie.CodiciTaglie_23, ModaTabellaTaglie.CodiciTaglie_24, ModaTabellaTaglie.CodiciTaglie_25, ModaTabellaTaglie.CodiciTaglie_26, ModaTabellaTaglie.CodiciTaglie_27, ModaTabellaTaglie.CodiciTaglie_28, ModaTabellaTaglie.CodiciTaglie_29, ModaTabellaTaglie.CodiciTaglie_30, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_1, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_2, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_3, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_4, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_5, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_6, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_7, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_8, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_9, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_10, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_11, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_12, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_13, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_14, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_15, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_16, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_17, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_18, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_19, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_20, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_21, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_22, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_23, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_24, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_25, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_26, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_27, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_28, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_29, "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_30 "
 
         Return SQL
     End Function
@@ -1073,6 +1264,36 @@ Public Class FormMain
         SQL = SQL & "    ModaTabellaTaglie.CodiciTaglie_16 AS [CodiciTaglie_16], ModaTabellaTaglie.CodiciTaglie_17 AS [CodiciTaglie_17], ModaTabellaTaglie.CodiciTaglie_18 AS [CodiciTaglie_18], ModaTabellaTaglie.CodiciTaglie_19 AS [CodiciTaglie_19], ModaTabellaTaglie.CodiciTaglie_20 AS [CodiciTaglie_20], "
         SQL = SQL & "    ModaTabellaTaglie.CodiciTaglie_21 AS [CodiciTaglie_21], ModaTabellaTaglie.CodiciTaglie_22 AS [CodiciTaglie_22], ModaTabellaTaglie.CodiciTaglie_23 AS [CodiciTaglie_23], ModaTabellaTaglie.CodiciTaglie_24 AS [CodiciTaglie_24], ModaTabellaTaglie.CodiciTaglie_25 AS [CodiciTaglie_25],  "
         SQL = SQL & "    ModaTabellaTaglie.CodiciTaglie_26 AS [CodiciTaglie_26], ModaTabellaTaglie.CodiciTaglie_27 AS [CodiciTaglie_27], ModaTabellaTaglie.CodiciTaglie_28 AS [CodiciTaglie_28], ModaTabellaTaglie.CodiciTaglie_29 AS [CodiciTaglie_29], ModaTabellaTaglie.CodiciTaglie_30 AS [CodiciTaglie_30],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_1  As [FlagTagliaValida_1],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_2  AS [FlagTagliaValida_2],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_3  As [FlagTagliaValida_3],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_4  AS [FlagTagliaValida_4],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_5  As [FlagTagliaValida_5],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_6  AS [FlagTagliaValida_6],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_7  As [FlagTagliaValida_7],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_8  AS [FlagTagliaValida_8],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_9  As [FlagTagliaValida_9],     "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_10  AS [FlagTagliaValida_10],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_11  As [FlagTagliaValida_11],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_12  AS [FlagTagliaValida_12],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_13  As [FlagTagliaValida_13],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_14  AS [FlagTagliaValida_14],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_15  As [FlagTagliaValida_15],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_16  AS [FlagTagliaValida_16],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_17  As [FlagTagliaValida_17],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_18  AS [FlagTagliaValida_18],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_19  As [FlagTagliaValida_19],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_20  AS [FlagTagliaValida_20],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_21  As [FlagTagliaValida_21],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_22  AS [FlagTagliaValida_22],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_23  As [FlagTagliaValida_23],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_24  AS [FlagTagliaValida_24],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_25  As [FlagTagliaValida_25],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_26  AS [FlagTagliaValida_26],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_27  As [FlagTagliaValida_27],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_28  AS [FlagTagliaValida_28],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_29  As [FlagTagliaValida_29],   "
+        SQL = SQL & "            ModaArticoli.FlagTagliaValida_30  AS [FlagTagliaValida_30],   "
         SQL = SQL & "    JSV_IMPORD_AVMA_D.QtOrdConfUm1 AS [QtOrdConfUm1], JSV_IMPORD_AVMA_D.QtOrdConfUm2 AS [QtOrdConfUm2], JSV_IMPORD_AVMA_D.QtOrdConfUm3 AS [QtOrdConfUm3], JSV_IMPORD_AVMA_D.QtOrdConfUm4 AS [QtOrdConfUm4], JSV_IMPORD_AVMA_D.QtOrdConfUm5 AS [QtOrdConfUm5],   "
         SQL = SQL & "    JSV_IMPORD_AVMA_D.QtOrdConfUm6 AS [QtOrdConfUm6], JSV_IMPORD_AVMA_D.QtOrdConfUm7 AS [QtOrdConfUm7], JSV_IMPORD_AVMA_D.QtOrdConfUm8 AS [QtOrdConfUm8], JSV_IMPORD_AVMA_D.QtOrdConfUm9 AS [QtOrdConfUm9], JSV_IMPORD_AVMA_D.QtOrdConfUm10 AS [QtOrdConfUm10],  "
         SQL = SQL & "    JSV_IMPORD_AVMA_D.QtOrdConfUm11 AS [QtOrdConfUm11], JSV_IMPORD_AVMA_D.QtOrdConfUm12 AS [QtOrdConfUm12], JSV_IMPORD_AVMA_D.QtOrdConfUm13 AS [QtOrdConfUm13], JSV_IMPORD_AVMA_D.QtOrdConfUm14 AS [QtOrdConfUm14], JSV_IMPORD_AVMA_D.QtOrdConfUm15 AS [QtOrdConfUm15],"
@@ -1087,8 +1308,42 @@ Public Class FormMain
         SQL = SQL & "    LEFT OUTER JOIN ArtDatiInLingua As [ArtDatiInLingua] On ((ArtDatiInLingua.CodArt=ArtConfigVariante.CodArt) And (ArtDatiInLingua.VarianteArt=ArtConfigVariante.VarianteArt) And ArtDatiInLingua.CodLingua=1 And (ArtDatiInLingua.DbGruppo=ArtConfigVariante.DBGruppo))"
         SQL = SQL & "    WHERE (JSV_IMPORD_AVMA_D.CodArt = '" & Replace(Trim(codArt), "'", "''") & "')"
         SQL = SQL & "    AND (JSV_IMPORD_AVMA_D.codmag in " & CODMAGAZZINO & ")"
-        SQL = SQL & "    AND (JSV_IMPORD_AVMA_D.DBGruppo='" & CODGRUPPO & "')"
 
+        If CODTAG <> "" Then
+            SQL = SQL & "AND ( "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_1 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_2 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_3 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_4 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_5 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_6 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_7 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_8 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_9 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_10 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_11 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_12 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_13 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_14 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_15 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_16 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_17 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_18 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_19 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_20 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_21 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_22 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_23 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_24 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_25 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_26 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_27 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_28 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_29 IN ('" + CODTAG + "') ) OR "
+            SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_30 IN ('" + CODTAG + "') ) ) "
+        End If
+
+        SQL = SQL & "    AND (JSV_IMPORD_AVMA_D.DBGruppo='" & CODGRUPPO & "')"
 
         Return SQL
     End Function
@@ -1102,7 +1357,6 @@ Public Class FormMain
 
         Dim Assegnato(30) As Integer
 
-
         Dim mysize As Integer
         Dim mysize2 As Integer
         Dim notaglie As Boolean = False
@@ -1111,21 +1365,17 @@ Public Class FormMain
         Dim totgiac As Integer = 0
         Dim contaTaglie As Integer = 1
 
-
-
         mysize = 0
         If Not varTag Is Nothing Then
             mysize = UBound(varTag)
         End If
         ReDim Preserve varTag(mysize + 1)
 
-
         If rs.RecordCount = 0 Then
             notaglie = True
         End If
 
         If notaglie = False Then
-
             If IsDBNull(rs.Fields("CodiceTabellaTaglie").Value) Or (Trim(rs.Fields("CodiceTabellaTaglie").Value.ToString) = "") Then
                 notaglie = True
             End If
@@ -1136,8 +1386,6 @@ Public Class FormMain
         ReDim varTag(UBound(varTag) - 1).Giacenze(0)
         ReDim varTag(UBound(varTag) - 1).TotaleGiac(0)
         ReDim varTag(UBound(varTag) - 1).TotaleCalc(0)
-
-
 
 
         varTag(UBound(varTag) - 1).CodArt = rs.Fields("GtgCart").Value
@@ -1162,7 +1410,6 @@ Public Class FormMain
                     Application.DoEvents()
                     Continue While
                 End If
-
 
                 contaTaglie = 1
                 totgiac = 0
@@ -1195,6 +1442,7 @@ Public Class FormMain
                             ReDim Preserve varTag(UBound(varTag) - 1).Giacenze(mysize2).Taglie(contaTaglie)
                             ReDim Preserve varTag(UBound(varTag) - 1).Giacenze(mysize2).Giacenze(contaTaglie)
                             ReDim Preserve varTag(UBound(varTag) - 1).Giacenze(mysize2).Calcolato(contaTaglie)
+                            ReDim Preserve varTag(UBound(varTag) - 1).Giacenze(mysize2).TagValide(contaTaglie)
                             '#MATTIA
                             ReDim Preserve varTag(UBound(varTag) - 1).Giacenze(mysize2).DispTeorica(contaTaglie)
 
@@ -1241,6 +1489,7 @@ Public Class FormMain
 
                             ' codice taglia
                             varTag(UBound(varTag) - 1).Giacenze(mysize2).Taglie(contaTaglie - 1) = rs.Fields("CodiciTaglie_" & idx).Value
+                            varTag(UBound(varTag) - 1).Giacenze(mysize2).TagValide(contaTaglie - 1) = rs.Fields("FlagTagliaValida_" & idx).Value
 
                             If FLAG_ORDINATO = "1" Then
                                 '    ' CALCOLO DELLA GIACENZA MAGAZZINO = GIACENZA
@@ -1254,31 +1503,28 @@ Public Class FormMain
 
                                 '    ' giacenza
                                 varTag(UBound(varTag) - 1).Giacenze(mysize2).Giacenze(contaTaglie - 1) = val1
-                                    totgiac = totgiac + varTag(UBound(varTag) - 1).Giacenze(mysize2).Giacenze(contaTaglie - 1)
+                                totgiac = totgiac + varTag(UBound(varTag) - 1).Giacenze(mysize2).Giacenze(contaTaglie - 1)
 
-                                    '    'calcolato
-                                    varTag(UBound(varTag) - 1).Giacenze(mysize2).Calcolato(contaTaglie - 1) = val1 + val5 - val3
-                                End If
-
-                                totCalc = totCalc + varTag(UBound(varTag) - 1).Giacenze(mysize2).Calcolato(contaTaglie - 1)
-
-                                contaTaglie = contaTaglie + 1
+                                '    'calcolato
+                                varTag(UBound(varTag) - 1).Giacenze(mysize2).Calcolato(contaTaglie - 1) = val1 + val5 - val3
                             End If
+
+                            totCalc = totCalc + varTag(UBound(varTag) - 1).Giacenze(mysize2).Calcolato(contaTaglie - 1)
+
+                            contaTaglie = contaTaglie + 1
                         End If
+                    End If
 
 
                 Next
                 varTag(UBound(varTag) - 1).TotaleCalc(mysize2) = totCalc
                 varTag(UBound(varTag) - 1).TotaleGiac(mysize2) = totgiac
 
-
-
                 mysize2 = mysize2 + 1
                 rs.MoveNext()
                 Application.DoEvents()
             End While
         Else
-
 
             ' articolo non a taglie
             varTag(UBound(varTag) - 1).haTaglie = False
@@ -1339,7 +1585,6 @@ Public Class FormMain
                 '    val5 = rs.Fields("QtOrdConfUm").Value
                 'End If
 
-
                 If FLAG_ORDINATO = "1" Then
                     varTag(UBound(varTag) - 1).TotaleGiac(mysize2) = val1 - val3
                     varTag(UBound(varTag) - 1).TotaleCalc(mysize2) = val1 + val2 - val3
@@ -1348,14 +1593,10 @@ Public Class FormMain
                     varTag(UBound(varTag) - 1).TotaleCalc(mysize2) = val1 + val2 - val3
                 End If
 
-
-
                 rs.MoveNext()
                 Application.DoEvents()
             End While
         End If
-
-
 
     End Sub
 
@@ -1376,12 +1617,12 @@ Public Class FormMain
             MsgBox(SQL & "    ---SQLGIACENZE IN POPOLASTRUTTURAVARIANTITAGLIE")
         End Try
 
-        'MsgBox("1.." & rs.RecordCount)
         If rs.RecordCount > 0 Then
             compilaStruttura(rs, False, False)
             compilato = True
         End If
         rs.Close()
+
 
         If compilato = False Then
 
@@ -1395,8 +1636,6 @@ Public Class FormMain
             End Try
 
 
-            'MsgBox("2.." & rs.RecordCount)
-
             If rs.RecordCount > 0 Then
                 compilaStruttura(rs, True, False)
                 compilato = True
@@ -1406,7 +1645,6 @@ Public Class FormMain
         End If
 
         If compilato = False Then
-
             SQL = getSQLOrdinato(codArt)
             Try
                 rs.Open(SQL, connSqlSrv, ADODB.CursorTypeEnum.adOpenStatic, ADODB.LockTypeEnum.adLockReadOnly)
@@ -1415,9 +1653,6 @@ Public Class FormMain
                 MsgBox(SQL & "    ---SQLORDINATO IN POPOLASTRUTTURAVARIANTITAGLIE")
             End Try
 
-
-
-            'MsgBox("3.." & rs.RecordCount)
             If rs.RecordCount > 0 Then
                 compilaStruttura(rs, True, True)
                 compilato = True
@@ -1434,15 +1669,9 @@ Public Class FormMain
             End If
         End If
 
-
         Return compilato
 
-
-
-
     End Function
-
-
 
     ' popola la griglia details giacenze
     Private Sub PopolaGrigliaVariantiTaglie(myGrid As DataGridView)
@@ -1453,15 +1682,12 @@ Public Class FormMain
         Dim idxVar2 As Integer
         Dim i As Integer
 
-
         For i = 0 To UBound(varTag) - 1
             If varTag(i).CodArt = DataGridViewArticoli.Rows(DataGridViewArticoli.CurrentCell.RowIndex).Cells(6).Value Then
                 idxArticolo = i
                 Exit For
             End If
         Next
-
-
 
         If loaded = False Then
             Exit Sub
@@ -1474,15 +1700,11 @@ Public Class FormMain
             Exit Sub
         End If
 
-
         'popola la griglia se l'articolo ha taglie
         If varTag(idxArticolo).haTaglie = True Then
             If varTag(idxArticolo).Giacenze Is Nothing Then
                 Exit Sub
             End If
-
-
-
 
             myGrid.Columns.Add("Variante", "Variante")
             myGrid.Columns(0).ReadOnly = True
@@ -1501,7 +1723,6 @@ Public Class FormMain
             myGrid.Columns(2).Width = 40
             myGrid.Columns(2).SortMode = DataGridViewColumnSortMode.NotSortable
 
-
             myGrid.Columns.Add("Totale", "Totale")
             myGrid.Columns(3).ReadOnly = True
             myGrid.Columns(3).Width = 40
@@ -1518,11 +1739,9 @@ Public Class FormMain
                 Exit Sub
             End Try
 
-
             For idxVariante = 0 To UBound(varTag(idxArticolo).Varianti) - 1
 
                 ' si popola a riga si riga no
-
                 idxVar1 = idxVariante * 2 ' indice giacenze
                 idxVar2 = (idxVariante * 2) + 1 ' indice calcolato
 
@@ -1545,7 +1764,6 @@ Public Class FormMain
                     myGrid.Rows(idxVar1).Cells(idxTaglia + idxStartTaglie).Value = varTag(idxArticolo).Giacenze(idxVariante).Giacenze(idxTaglia)
                 Next
 
-
                 ' calcolato  --> disponibilità teorica
                 myGrid.Rows.Add()
                 myGrid.Rows(idxVar2).Cells(0).Style.BackColor = colore_disabilitato
@@ -1556,17 +1774,13 @@ Public Class FormMain
                 myGrid.Rows(idxVar2).Cells(2).Style.BackColor = colore_disabilitato
                 myGrid.Rows(idxVar2).Cells(2).Value = varTag(idxArticolo).UM
 
-
                 myGrid.Rows(idxVar2).Cells(3).Style.BackColor = colore_disabilitato
                 myGrid.Rows(idxVar2).Cells(3).Value = varTag(idxArticolo).TotaleCalc(idxVariante)
-
-
 
                 For idxTaglia = 0 To UBound(varTag(idxArticolo).Giacenze(0).Giacenze) - 1
                     myGrid.Rows(idxVar2).Cells(idxTaglia + idxStartTaglie).Value = varTag(idxArticolo).Giacenze(idxVariante).Calcolato(idxTaglia)
                     myGrid.Rows(idxVar2).Cells(idxTaglia + idxStartTaglie).Style.BackColor = colore_lettura_facilitata
                 Next
-
 
             Next
 
@@ -1576,7 +1790,6 @@ Public Class FormMain
             myGrid.Columns(0).Width = 150
             myGrid.Columns(0).DefaultCellStyle.Font = New Font("Microsoft Sans Serif", 7, FontStyle.Bold)
             myGrid.Columns(0).SortMode = DataGridViewColumnSortMode.NotSortable
-
 
             myGrid.Columns.Add("Tipologia", "")
             myGrid.Columns(1).ReadOnly = True
@@ -1589,7 +1802,6 @@ Public Class FormMain
             myGrid.Columns(2).Width = 40
             myGrid.Columns(2).SortMode = DataGridViewColumnSortMode.NotSortable
 
-
             myGrid.Columns.Add("Totale", "Totale")
             myGrid.Columns(3).ReadOnly = False
             myGrid.Columns(3).Width = 40
@@ -1599,10 +1811,8 @@ Public Class FormMain
                 For idxVariante = 0 To UBound(varTag(idxArticolo).Varianti) - 1
 
                     ' si popola a riga si riga no
-
                     idxVar1 = idxVariante * 2 ' indice giacenze
                     idxVar2 = (idxVariante * 2) + 1 ' indice calcolato
-
 
                     ' giacenze
                     myGrid.Rows.Add()
@@ -1618,8 +1828,6 @@ Public Class FormMain
                     myGrid.Rows(idxVar1).Cells(3).Value = varTag(idxArticolo).TotaleGiac(idxVariante)
                     myGrid.Rows(idxVar1).Cells(3).Style.BackColor = Color.White
 
-
-
                     ' calcolato
                     myGrid.Rows.Add()
                     myGrid.Rows(idxVar2).Cells(0).Style.BackColor = colore_disabilitato
@@ -1634,21 +1842,12 @@ Public Class FormMain
                     myGrid.Rows(idxVar2).Cells(3).Style.BackColor = Color.White
                     myGrid.Rows(idxVar2).Cells(3).Value = varTag(idxArticolo).TotaleCalc(idxVariante)
 
-
                 Next
             End If
 
-
-
-
         End If
 
-
-
     End Sub
-
-
-
 
     Private Sub DataGridViewGiacenze_CurrentCellChanged(sender As System.Object, e As System.EventArgs) Handles DataGridViewArticoli.CurrentCellChanged
         ' ripopola la griglia in base alla riga selezionata
@@ -1667,9 +1866,6 @@ Public Class FormMain
 
     End Sub
 
-
-
-
     Private Sub DataGridViewGiacenze_CellEndEdit(sender As System.Object, e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridViewGiacenze.CellEndEdit
         Dim idxRowVariante As Integer
         Dim idxColumVariante As Integer
@@ -1682,19 +1878,15 @@ Public Class FormMain
 
         End If
 
-
         ' se non è cambiato nulla non faccio niente
         If oldCellvalue = DataGridViewGiacenze.CurrentCell.Value Then
             Exit Sub
         End If
 
-
-
         If Not Integer.TryParse(DataGridViewGiacenze.CurrentCell.Value, valAsInt) Then
             MsgBox("inserire un valore numerico senza la virgola")
             DataGridViewGiacenze.CurrentCell.Value = oldCellvalue
         End If
-
 
         idxArticolo = DataGridViewArticoli.CurrentCell.RowIndex
 
@@ -1749,7 +1941,6 @@ Public Class FormMain
 
     End Sub
 
-
     Private Sub DataGridViewGiacenze_CellLeave(sender As System.Object, e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridViewGiacenze.CellLeave
         ' salva il valore del dato della current cella prima della modifica per ripristinarlo in caso di errore
         oldCellvalue = DataGridViewGiacenze.CurrentCell.Value
@@ -1762,16 +1953,14 @@ Public Class FormMain
 
     End Sub
 
-
     ' scrive 
     Public Sub AppendHTML(filename As String, ByRef strExp As String)
 
         Dim fileExists As Boolean = File.Exists(filename)
         File.AppendAllText(filename, strExp & vbCrLf)
         strExp = ""
+
     End Sub
-
-
 
     ' esporta l'html delle giacenze
     Private Sub exportHTML(showGiacenze As Boolean, showCalcolato As Boolean, showImage As Boolean, LabelGiac As String, labelCalc As String)
@@ -2183,7 +2372,6 @@ Public Class FormMain
                                 Else
                                     'If (exportGiacMinZero = False) And (varTag(idxArt).TotaleGiac(idxVariante) < 0) Then
                                     If (exportGiacMinZero = False) And (ricalcolatotaleGiacPerEsportazione(idxArt, idxVariante) < 0) Then
-
                                     Else
                                         bEsportaVariante = True
                                         ' giacenze
@@ -2600,6 +2788,12 @@ Public Class FormMain
         End If
 
         sb = New System.Text.StringBuilder(500)
+        GetPrivateProfileString(Sezione, "CODTAG", "", sb, sb.Capacity, VL_FileName)
+        If sb.ToString <> "" Then
+            CODTAG = sb.ToString
+        End If
+
+        sb = New System.Text.StringBuilder(500)
         GetPrivateProfileString(Sezione, "CODMAGAZZINO", "", sb, sb.Capacity, VL_FileName)
         If sb.ToString <> "" Then
             CODMAGAZZINO1 = sb.ToString
@@ -3004,6 +3198,7 @@ Public Class FormMain
         Dim exportGiacZero As Boolean
         Dim exportGiacMinZero As Boolean
         Dim exportMaggioriDi As Boolean = 0
+        Dim exportBuchiTaglia As Boolean
         Dim bEsportaVariante As Boolean = False
         Dim bEsportaArt As Boolean = False
         Dim bTaglieSempre As Boolean
@@ -3060,6 +3255,7 @@ Public Class FormMain
         exportGiacZero = FormExport.CheckBoxTotaliZero.Checked
         bTaglieSempre = FormExport.CheckBoxTaglie.Checked
         exportGiacMinZero = FormExport.CheckBoxTotaliMinZero.Checked
+        exportBuchiTaglia = FormExport.chkBuchiTaglia.Checked
         exportMaggioriDi = 1
 
 
@@ -3145,6 +3341,10 @@ Public Class FormMain
                         If (ricalcolatotaleGiacPerEsportazione(idxArt, idxVariante) < 0) And exportGiacMinZero = False Then
                             Continue For
                         End If
+
+                        If (presenzaBuchiTagliaGiac(idxArt, idxVariante) = 1) And exportBuchiTaglia = False Then
+                            Continue For
+                        End If
                         '
                         almenoUnaVar = 1
                     Next
@@ -3164,11 +3364,15 @@ Public Class FormMain
                             Continue For
                         End If
 
-                        If (ricalcolatotaleGiacPerEsportazione(idxArt, idxVariante) = 0) And exportGiacZero = False Then
+                        If (ricalcolatotaleCalcPerEsportazione(idxArt, idxVariante) = 0) And exportGiacZero = False Then
                             Continue For
                         End If
 
-                        If (ricalcolatotaleGiacPerEsportazione(idxArt, idxVariante) < 0) And exportGiacMinZero = False Then
+                        If (ricalcolatotaleCalcPerEsportazione(idxArt, idxVariante) < 0) And exportGiacMinZero = False Then
+                            Continue For
+                        End If
+
+                        If (presenzaBuchiTagliaCalc(idxArt, idxVariante) = 1) And exportBuchiTaglia = False Then
                             Continue For
                         End If
 
@@ -3303,8 +3507,8 @@ Public Class FormMain
                         If Array.IndexOf(escludiVar, varTag(idxArt).CodVariante(idxVariante)) >= 0 Then
                             Continue For
                         End If
-
-                        If showGiacenze = True And exportGiacZero = False Then
+                        ' And exportGiacZero = False
+                        If showGiacenze = True Then
                             If (exportMaggioriDi = True) And (ricalcolatotaleGiacPerEsportazione(idxArt, idxVariante) <= FormExport.NumericUpDownMaggioriDi.Value) Then
                                 Continue For
                             Else
@@ -3315,7 +3519,34 @@ Public Class FormMain
                                     'If (exportGiacMinZero = False) And (varTag(idxArt).TotaleGiac(idxVariante) < 0) Then
                                     If (exportGiacMinZero = False) And (ricalcolatotaleGiacPerEsportazione(idxArt, idxVariante) < 0) Then
                                         Continue For
+                                    Else
+                                        If (presenzaBuchiTagliaGiac(idxArt, idxVariante) = 1) And exportBuchiTaglia = False Then
+                                            'Continue For
+
+                                            If showCalcolato = True Then
+                                                If (exportMaggioriDi = True) And (ricalcolatotaleCalcPerEsportazione(idxArt, idxVariante) <= FormExport.NumericUpDownMaggioriDi.Value) Then
+                                                    Continue For
+                                                Else
+
+                                                    If (exportGiacZero = False) And (ricalcolatotaleCalcPerEsportazione(idxArt, idxVariante) = 0) Then
+                                                        Continue For
+                                                    Else
+                                                        'If (exportGiacMinZero = False) And (varTag(idxArt).TotaleGiac(idxVariante) < 0) Then
+                                                        If (exportGiacMinZero = False) And (ricalcolatotaleCalcPerEsportazione(idxArt, idxVariante) < 0) Then
+                                                            Continue For
+                                                        Else
+                                                            If (presenzaBuchiTagliaCalc(idxArt, idxVariante) = 1) And exportBuchiTaglia = False Then
+                                                                Continue For
+                                                            End If
+                                                        End If
+
+                                                    End If
+                                                End If
+                                            End If
+
+                                        End If
                                     End If
+
                                 End If
                             End If
                         End If
@@ -3323,24 +3554,6 @@ Public Class FormMain
 
                         idxRow = idxRow + 1
                         bEsportaVariante = False
-
-                        ' TODO - VERIFICARE controlla se mostrare l'immagine variante
-                        'If bShowImgVariante = True Then
-                        '    srcFilename = getFileVarianti(varTag(idxArt).CodArt, varTag(idxArt).CodVariante(idxVariante))
-                        '    If File.Exists(srcFilename) = True Then
-                        '        ' carica immagine da file
-                        '        'html += vbTab + TAG_CELL_VARIANTE + "<img style='display:block; width:100px;height:100px;' id='base64image' src='data:image/jpeg;base64, " & convertFileToTobase64(srcFilename) & "' />" + TAG_CELL_END
-
-                        '        ' ho tolto la forzatura alla dimensione 100x100 dell'immagine
-                        '        strvAl += "immagine Variante"
-                        '        xlWorkSheet.Cells(idxRow, 3) = strvAl
-                        '    Else
-                        '        strvAl += "no immagineVariante"
-                        '        xlWorkSheet.Cells(idxRow, 3) = strvAl
-                        '        html += vbTab + TAG_CELL_VARIANTE + "" + TAG_CELL_END
-                        '    End If
-
-                        'End If
 
                         ' la riga commentata esportava solo il codice variante quella scommentata esporta codice + descrizione
                         ' html += vbTab + TAG_CELL_VARIANTE + "<font size=""3"">" + varTag(idxArt).CodVariante(idxVariante) + "</font>" + TAG_CELL_END
@@ -3389,9 +3602,11 @@ Public Class FormMain
 
                             If FormExport.CheckBoxArtCodice.Checked = True Then
                                 If FormExport.CheckBoxLingua.Checked = True Then
-                                    strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt + " - " + varTag(idxArt).DescrInglese & vbCrLf & vbCrLf
+                                    strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt & vbCrLf
+                                    strvAl += varTag(idxArt).DescrInglese
                                 Else
-                                    strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt + " - " + varTag(idxArt).DescEstesa & vbCrLf & vbCrLf
+                                    strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt & vbCrLf
+                                    strvAl += varTag(idxArt).DescEstesa
                                 End If
                             End If
 
@@ -3492,13 +3707,272 @@ Public Class FormMain
                                         If (exportGiacMinZero = False) And (ricalcolatotaleGiacPerEsportazione(idxArt, idxVariante) < 0) Then
 
                                         Else
+                                            If (presenzaBuchiTagliaGiac(idxArt, idxVariante) = 1) And exportBuchiTaglia = False Then
+
+                                            Else
+
+                                                bEsportaVariante = True
+                                                ' giacenze
+
+                                                If (stampaTestata = True And testgiastampata = False) Then
+                                                    If FormExport.CheckBoxArtCodice.Checked = True Then
+                                                        If FormExport.CheckBoxLingua.Checked = True Then
+                                                            strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescrInglese & vbCrLf
+                                                        Else
+                                                            strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt + " - " + varTag(idxArt).DescEstesa & vbCrLf
+                                                        End If
+                                                    End If
+
+                                                    'Stagione
+                                                    If FormExport.CheckBoxArtStagione.Checked = True Then
+                                                        If FormExport.CheckBoxLingua.Checked = True Then
+                                                            strvAl += "SEASON: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf
+                                                        Else
+                                                            strvAl += "STAG: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf
+                                                        End If
+
+                                                    End If
+
+                                                    'Famiglia
+                                                    If FormExport.CheckBoxArtFamiglia.Checked = True Then
+                                                        strvAl += "FAM: " + varTag(idxArt).Famiglia & vbCrLf
+                                                    End If
+
+                                                    'Famiglia
+                                                    If FormExport.CheckBoxArtComposizione.Checked = True Then
+                                                        strvAl += "COMP: " + varTag(idxArt).Composizione & vbCrLf
+                                                    End If
+
+                                                    'Marca
+                                                    If FormExport.CheckBoxMarca.Checked = True Then
+                                                        If FormExport.CheckBoxLingua.Checked = True Then
+                                                            strvAl += "LINE: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf
+                                                        Else
+                                                            strvAl += "LINEA: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf
+                                                        End If
+                                                    End If
+
+                                                    'Nomenclatura
+                                                    If FormExport.CheckBoxCodNomenclatura.Checked = True Then
+                                                        If FormExport.CheckBoxLingua.Checked = True Then
+                                                            strvAl += "HS CODE: " + varTag(idxArt).CodNomenclatura & vbCrLf
+                                                        Else
+                                                            strvAl += "COD NOMENCLATURA: " + varTag(idxArt).CodNomenclatura & vbCrLf
+                                                        End If
+                                                    End If
+
+                                                    'MadeIn
+                                                    If versione <> VER_35 Then
+                                                        If FormExport.CheckBoxMadeIn.Checked = True Then
+                                                            strvAl += "MADE IN: " + varTag(idxArt).MadeIn & vbCrLf
+                                                        End If
+                                                    End If
+
+                                                    xlWorkSheet.Cells(idxRow, 2) = strvAl
+                                                    xlWorkSheet.Range("B" & idxRow).ColumnWidth = 40
+                                                    xlWorkSheet.Cells(idxRow, 2).interior.color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCyan)
+                                                    xlWorkSheet.Cells(idxRow, 2).VerticalAlignment = Excel.Constants.xlCenter
+                                                    xlWorkSheet.Cells(idxRow, 2).HorizontalAlignment = Excel.Constants.xlLeft
+                                                    xlWorkSheet.Cells(idxRow, 2).font.bold = True
+                                                    xlWorkSheet.Cells(idxRow, 2).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
+
+                                                    stampaTestata = True
+                                                    testgiastampata = True
+                                                End If
+
+
+                                                idxRow = idxRow + 1
+                                                xlWorkSheet.Rows(idxRow).RowHeight = 30
+                                                xlWorkSheet.Cells(idxRow, 2) = LabelGiac
+                                                xlWorkSheet.Cells(idxRow, 3) = varTag(idxArt).UM
+                                                xlWorkSheet.Cells(idxRow, 4) = ricalcolatotaleGiacPerEsportazione(idxArt, idxVariante)
+
+                                                xlWorkSheet.Cells(idxRow, 2).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
+                                                xlWorkSheet.Cells(idxRow, 3).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
+                                                xlWorkSheet.Cells(idxRow, 4).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
+
+                                                idxColonna = 5
+                                                For idxTaglia = 0 To UBound(varTag(idxArt).Giacenze(0).Giacenze) - 1
+                                                    If Array.IndexOf(escludiTg, varTag(idxArt).Giacenze(idxVariante).Taglie(idxTaglia).ToString) >= 0 Then
+                                                        Continue For
+                                                    End If
+
+                                                    strOutVal = ""
+                                                    If varTag(idxArt).Giacenze(idxVariante).Giacenze(idxTaglia) <> 0 Then
+                                                        strOutVal = varTag(idxArt).Giacenze(idxVariante).Giacenze(idxTaglia).ToString
+                                                    End If
+
+                                                    'controlla se deve esportare un massimo
+                                                    If FormExport.CheckBoxMaxQta.Checked = True Then
+                                                        If strOutVal <> "" Then
+                                                            If Int(strOutVal) >= FormExport.NumericUpDownMaxQta.Value Then
+                                                                strOutVal = FormExport.NumericUpDownMaxQta.Value.ToString
+                                                            End If
+                                                        End If
+                                                    End If
+
+
+                                                    xlWorkSheet.Rows(idxRow).RowHeight = 30
+                                                    xlWorkSheet.Cells(idxRow, idxColonna) = strOutVal
+                                                    xlWorkSheet.Cells(idxRow, idxColonna).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
+
+                                                    idxColonna = idxColonna + 1
+                                                    Application.DoEvents()
+                                                Next
+                                            End If
+                                        End If
+                                    End If
+                                End If
+
+
+                                If showCalcolato = True Then
+                                    If (exportGiacZero = False) And (varTag(idxArt).TotaleCalc(idxVariante) = 0) Then
+
+                                    Else
+                                        'If (exportGiacMinZero = False) And (varTag(idxArt).TotaleCalc(idxVariante) < 0) Then
+                                        If (exportGiacMinZero = False) And (ricalcolatotaleCalcPerEsportazione(idxArt, idxVariante) < 0) Then
+
+                                        Else
+
+                                            If (presenzaBuchiTagliaCalc(idxArt, idxVariante) = 1) And exportBuchiTaglia = False Then
+                                            Else
+                                                bEsportaVariante = True
+
+                                                If (stampaTestata = True And testgiastampata = False) Then
+
+                                                    idxRow = idxRow - 1
+                                                    'codice
+                                                    strvAl = ""
+                                                    If FormExport.CheckBoxArtCodice.Checked = True Then
+                                                        If FormExport.CheckBoxLingua.Checked = True Then
+                                                            strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescrInglese & vbCrLf
+                                                        Else
+                                                            strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt + " - " + varTag(idxArt).DescEstesa & vbCrLf
+                                                        End If
+                                                    End If
+
+                                                    'Stagione
+                                                    If FormExport.CheckBoxArtStagione.Checked = True Then
+                                                        If FormExport.CheckBoxLingua.Checked = True Then
+                                                            strvAl += "SEASON: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf
+                                                        Else
+                                                            strvAl += "STAG: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf
+                                                        End If
+
+                                                    End If
+
+                                                    'Famiglia
+                                                    If FormExport.CheckBoxArtFamiglia.Checked = True Then
+                                                        strvAl += "FAM: " + varTag(idxArt).Famiglia & vbCrLf
+                                                    End If
+
+                                                    'Famiglia
+                                                    If FormExport.CheckBoxArtComposizione.Checked = True Then
+                                                        strvAl += "COMP: " + varTag(idxArt).Composizione & vbCrLf
+                                                    End If
+
+                                                    'Marca
+                                                    If FormExport.CheckBoxMarca.Checked = True Then
+                                                        If FormExport.CheckBoxLingua.Checked = True Then
+                                                            strvAl += "LINE: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf
+                                                        Else
+                                                            strvAl += "LINEA: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf
+                                                        End If
+                                                    End If
+
+                                                    'Nomenclatura
+                                                    If FormExport.CheckBoxCodNomenclatura.Checked = True Then
+                                                        If FormExport.CheckBoxLingua.Checked = True Then
+                                                            strvAl += "HS CODE: " + varTag(idxArt).CodNomenclatura & vbCrLf
+                                                        Else
+                                                            strvAl += "COD NOMENCLATURA: " + varTag(idxArt).CodNomenclatura & vbCrLf
+                                                        End If
+                                                    End If
+
+                                                    'MadeIn
+                                                    If versione <> VER_35 Then
+                                                        If FormExport.CheckBoxMadeIn.Checked = True Then
+                                                            strvAl += "MADE IN: " + varTag(idxArt).MadeIn & vbCrLf
+                                                        End If
+                                                    End If
+
+                                                    xlWorkSheet.Cells(idxRow, 2) = strvAl
+                                                    xlWorkSheet.Range("B" & idxRow).ColumnWidth = 40
+                                                    xlWorkSheet.Cells(idxRow, 2).interior.color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCyan)
+                                                    xlWorkSheet.Cells(idxRow, 2).VerticalAlignment = Excel.Constants.xlCenter
+                                                    xlWorkSheet.Cells(idxRow, 2).HorizontalAlignment = Excel.Constants.xlLeft
+                                                    xlWorkSheet.Cells(idxRow, 2).font.bold = True
+                                                    xlWorkSheet.Cells(idxRow, 2).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
+
+                                                    stampaTestata = False
+                                                    testgiastampata = True
+                                                End If
+
+                                                ' calcolato
+
+                                                idxRow = idxRow + 1
+                                                xlWorkSheet.Rows(idxRow).RowHeight = 30
+                                                xlWorkSheet.Cells(idxRow, 2) = labelCalc
+                                                xlWorkSheet.Cells(idxRow, 3) = varTag(idxArt).UM
+                                                xlWorkSheet.Cells(idxRow, 4) = ricalcolatotaleCalcPerEsportazione(idxArt, idxVariante)
+
+                                                xlWorkSheet.Cells(idxRow, 2).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
+                                                xlWorkSheet.Cells(idxRow, 3).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
+                                                xlWorkSheet.Cells(idxRow, 4).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
+
+                                                idxColonna = 5
+                                                For idxTaglia = 0 To UBound(varTag(idxArt).Giacenze(0).Calcolato) - 1
+                                                    If Array.IndexOf(escludiTg, varTag(idxArt).Giacenze(idxVariante).Taglie(idxTaglia).ToString) >= 0 Then
+                                                        Continue For
+                                                    End If
+                                                    strOutVal = ""
+                                                    If varTag(idxArt).Giacenze(idxVariante).Calcolato(idxTaglia) <> 0 Then
+                                                        strOutVal = varTag(idxArt).Giacenze(idxVariante).Calcolato(idxTaglia).ToString
+                                                    End If
+
+                                                    'controlla se deve esportare un massimo
+                                                    If FormExport.CheckBoxMaxQta.Checked = True Then
+                                                        If strOutVal <> "" Then
+                                                            If Int(strOutVal) >= FormExport.NumericUpDownMaxQta.Value Then
+                                                                strOutVal = FormExport.NumericUpDownMaxQta.Value.ToString
+                                                            End If
+                                                        End If
+                                                    End If
+                                                    xlWorkSheet.Rows(idxRow).RowHeight = 30
+                                                    xlWorkSheet.Cells(idxRow, idxColonna) = strOutVal
+                                                    xlWorkSheet.Cells(idxRow, idxColonna).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
+
+                                                    idxColonna = idxColonna + 1
+                                                    Application.DoEvents()
+                                                Next
+                                            End If
+                                        End If
+                                    End If
+                                End If
+
+                            End If
+                        Else
+                            If showGiacenze = True Then
+                                'If (exportGiacZero = False) And (varTag(idxArt).TotaleGiac(idxVariante) = 0) Then
+                                If (exportGiacZero = False) And (ricalcolatotaleGiacPerEsportazione(idxArt, idxVariante) = 0) Then
+
+                                Else
+                                    'If (exportGiacMinZero = False) And (varTag(idxArt).TotaleGiac(idxVariante) < 0) Then
+                                    If (exportGiacMinZero = False) And (ricalcolatotaleGiacPerEsportazione(idxArt, idxVariante) < 0) Then
+
+                                    Else
+
+                                        If (presenzaBuchiTagliaGiac(idxArt, idxVariante) = 1) And exportBuchiTaglia = False Then
+
+                                        Else
                                             bEsportaVariante = True
                                             ' giacenze
-                                            ' TODO VERIFICARE IMMAGINE VARIANTE
-                                            'If bShowImgVariante = True Then
-                                            '    html += vbTab + TAG_CELL_VARIANTE + "" + TAG_CELL_END
-                                            'End If
+
                                             If (stampaTestata = True And testgiastampata = False) Then
+
+                                                idxRow = idxRow - 1
+                                                'codice
+                                                strvAl = ""
                                                 If FormExport.CheckBoxArtCodice.Checked = True Then
                                                     If FormExport.CheckBoxLingua.Checked = True Then
                                                         strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescrInglese & vbCrLf
@@ -3552,6 +4026,7 @@ Public Class FormMain
                                                     End If
                                                 End If
 
+
                                                 xlWorkSheet.Cells(idxRow, 2) = strvAl
                                                 xlWorkSheet.Range("B" & idxRow).ColumnWidth = 40
                                                 xlWorkSheet.Cells(idxRow, 2).interior.color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCyan)
@@ -3560,68 +4035,45 @@ Public Class FormMain
                                                 xlWorkSheet.Cells(idxRow, 2).font.bold = True
                                                 xlWorkSheet.Cells(idxRow, 2).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
 
-                                                stampaTestata = True
+                                                stampaTestata = False
                                                 testgiastampata = True
                                             End If
 
-
-                                            idxRow = idxRow + 1
+                                            idxRow = idxRow + 2
                                             xlWorkSheet.Rows(idxRow).RowHeight = 30
-                                            xlWorkSheet.Cells(idxRow, 2) = LabelGiac
-                                            xlWorkSheet.Cells(idxRow, 3) = varTag(idxArt).UM
-                                            xlWorkSheet.Cells(idxRow, 4) = ricalcolatotaleGiacPerEsportazione(idxArt, idxVariante)
+                                            xlWorkSheet.Cells(idxRow, 1) = LabelGiac
+                                            xlWorkSheet.Cells(idxRow, 2) = varTag(idxArt).UM
+                                            xlWorkSheet.Cells(idxRow, 3) = ricalcolatotaleGiacPerEsportazione(idxArt, idxVariante)
 
+                                            xlWorkSheet.Cells(idxRow, 1).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
                                             xlWorkSheet.Cells(idxRow, 2).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
                                             xlWorkSheet.Cells(idxRow, 3).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
-                                            xlWorkSheet.Cells(idxRow, 4).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
-
-                                            idxColonna = 5
-                                            For idxTaglia = 0 To UBound(varTag(idxArt).Giacenze(0).Giacenze) - 1
-                                                If Array.IndexOf(escludiTg, varTag(idxArt).Giacenze(idxVariante).Taglie(idxTaglia).ToString) >= 0 Then
-                                                    Continue For
-                                                End If
-
-                                                strOutVal = ""
-                                                If varTag(idxArt).Giacenze(idxVariante).Giacenze(idxTaglia) <> 0 Then
-                                                    strOutVal = varTag(idxArt).Giacenze(idxVariante).Giacenze(idxTaglia).ToString
-                                                End If
-
-                                                'controlla se deve esportare un massimo
-                                                If FormExport.CheckBoxMaxQta.Checked = True Then
-                                                    If strOutVal <> "" Then
-                                                        If Int(strOutVal) >= FormExport.NumericUpDownMaxQta.Value Then
-                                                            strOutVal = FormExport.NumericUpDownMaxQta.Value.ToString
-                                                        End If
-                                                    End If
-                                                End If
-
-
-                                                xlWorkSheet.Rows(idxRow).RowHeight = 30
-                                                xlWorkSheet.Cells(idxRow, idxColonna) = strOutVal
-                                                xlWorkSheet.Cells(idxRow, idxColonna).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
-
-                                                idxColonna = idxColonna + 1
-                                                Application.DoEvents()
-                                            Next
                                         End If
-
                                     End If
                                 End If
+                            End If
 
+                            If showCalcolato = True Then
+                                If (exportGiacZero = False) And (varTag(idxArt).TotaleCalc(idxVariante) = 0) Then
 
-                                If showCalcolato = True Then
-                                    If (exportGiacZero = False) And (varTag(idxArt).TotaleCalc(idxVariante) = 0) Then
+                                Else
+                                    'If (exportGiacMinZero = False) And (varTag(idxArt).TotaleCalc(idxVariante) < 0) Then
+                                    If (exportGiacMinZero = False) And (ricalcolatotaleCalcPerEsportazione(idxArt, idxVariante) < 0) Then
 
                                     Else
-                                        'If (exportGiacMinZero = False) And (varTag(idxArt).TotaleCalc(idxVariante) < 0) Then
-                                        If (exportGiacMinZero = False) And (ricalcolatotaleCalcPerEsportazione(idxArt, idxVariante) < 0) Then
 
+                                        If (presenzaBuchiTagliaCalc(idxArt, idxVariante) = 1) And exportBuchiTaglia = False Then
                                         Else
+
                                             bEsportaVariante = True
+                                            ' calcolato - TODO verificare immagine variante
+                                            'html += vbTab + TAG_ROW
+                                            'If bShowImgVariante = True Then
+                                            '    html += vbTab + TAG_CELL_VARIANTE + "" + TAG_CELL_END
+                                            'End If
+                                            stampaTestata = True
 
                                             If (stampaTestata = True And testgiastampata = False) Then
-
-
 
                                                 idxRow = idxRow - 1
                                                 'codice
@@ -3691,260 +4143,16 @@ Public Class FormMain
                                                 testgiastampata = True
                                             End If
 
-                                            ' calcolato - TODO verificare immagini
-                                            'html += vbTab + TAG_ROW
-                                            'If bShowImgVariante = True Then
-                                            '    html += vbTab + TAG_CELL_VARIANTE + "" + TAG_CELL_END
-                                            'End If
-                                            idxRow = idxRow + 1
+                                            idxRow = idxRow + 2
                                             xlWorkSheet.Rows(idxRow).RowHeight = 30
-                                            xlWorkSheet.Cells(idxRow, 2) = labelCalc
-                                            xlWorkSheet.Cells(idxRow, 3) = varTag(idxArt).UM
-                                            xlWorkSheet.Cells(idxRow, 4) = ricalcolatotaleCalcPerEsportazione(idxArt, idxVariante)
+                                            xlWorkSheet.Cells(idxRow, 1) = labelCalc
+                                            xlWorkSheet.Cells(idxRow, 2) = varTag(idxArt).UM
+                                            xlWorkSheet.Cells(idxRow, 3) = ricalcolatotaleCalcPerEsportazione(idxArt, idxVariante)
 
+                                            xlWorkSheet.Cells(idxRow, 1).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
                                             xlWorkSheet.Cells(idxRow, 2).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
                                             xlWorkSheet.Cells(idxRow, 3).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
-                                            xlWorkSheet.Cells(idxRow, 4).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
-
-                                            idxColonna = 5
-                                            For idxTaglia = 0 To UBound(varTag(idxArt).Giacenze(0).Calcolato) - 1
-                                                If Array.IndexOf(escludiTg, varTag(idxArt).Giacenze(idxVariante).Taglie(idxTaglia).ToString) >= 0 Then
-                                                    Continue For
-                                                End If
-                                                strOutVal = ""
-                                                If varTag(idxArt).Giacenze(idxVariante).Calcolato(idxTaglia) <> 0 Then
-                                                    strOutVal = varTag(idxArt).Giacenze(idxVariante).Calcolato(idxTaglia).ToString
-                                                End If
-
-                                                'controlla se deve esportare un massimo
-                                                If FormExport.CheckBoxMaxQta.Checked = True Then
-                                                    If strOutVal <> "" Then
-                                                        If Int(strOutVal) >= FormExport.NumericUpDownMaxQta.Value Then
-                                                            strOutVal = FormExport.NumericUpDownMaxQta.Value.ToString
-                                                        End If
-                                                    End If
-                                                End If
-                                                xlWorkSheet.Rows(idxRow).RowHeight = 30
-                                                xlWorkSheet.Cells(idxRow, idxColonna) = strOutVal
-                                                xlWorkSheet.Cells(idxRow, idxColonna).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
-
-                                                idxColonna = idxColonna + 1
-                                                Application.DoEvents()
-                                            Next
                                         End If
-                                    End If
-                                End If
-
-                            End If
-                        Else
-                            If showGiacenze = True Then
-                                'If (exportGiacZero = False) And (varTag(idxArt).TotaleGiac(idxVariante) = 0) Then
-                                If (exportGiacZero = False) And (ricalcolatotaleGiacPerEsportazione(idxArt, idxVariante) = 0) Then
-
-                                Else
-                                    'If (exportGiacMinZero = False) And (varTag(idxArt).TotaleGiac(idxVariante) < 0) Then
-                                    If (exportGiacMinZero = False) And (ricalcolatotaleGiacPerEsportazione(idxArt, idxVariante) < 0) Then
-
-                                    Else
-                                        bEsportaVariante = True
-                                        ' giacenze - TODO VERIFICARE IMMAGINE PER VARIANTE
-                                        'html += vbTab + TAG_ROW
-                                        'If bShowImgVariante = True Then
-                                        '    html += vbTab + TAG_CELL_VARIANTE + "" + TAG_CELL_END
-                                        'End If
-
-                                        If (stampaTestata = True And testgiastampata = False) Then
-
-
-                                            idxRow = idxRow - 1
-                                            'codice
-                                            strvAl = ""
-                                            If FormExport.CheckBoxArtCodice.Checked = True Then
-                                                If FormExport.CheckBoxLingua.Checked = True Then
-                                                    strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescrInglese & vbCrLf
-                                                Else
-                                                    strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt + " - " + varTag(idxArt).DescEstesa & vbCrLf
-                                                End If
-                                            End If
-
-                                            'Stagione
-                                            If FormExport.CheckBoxArtStagione.Checked = True Then
-                                                If FormExport.CheckBoxLingua.Checked = True Then
-                                                    strvAl += "SEASON: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf
-                                                Else
-                                                    strvAl += "STAG: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf
-                                                End If
-
-                                            End If
-
-                                            'Famiglia
-                                            If FormExport.CheckBoxArtFamiglia.Checked = True Then
-                                                strvAl += "FAM: " + varTag(idxArt).Famiglia & vbCrLf
-                                            End If
-
-                                            'Famiglia
-                                            If FormExport.CheckBoxArtComposizione.Checked = True Then
-                                                strvAl += "COMP: " + varTag(idxArt).Composizione & vbCrLf
-                                            End If
-
-                                            'Marca
-                                            If FormExport.CheckBoxMarca.Checked = True Then
-                                                If FormExport.CheckBoxLingua.Checked = True Then
-                                                    strvAl += "LINE: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf
-                                                Else
-                                                    strvAl += "LINEA: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf
-                                                End If
-                                            End If
-
-                                            'Nomenclatura
-                                            If FormExport.CheckBoxCodNomenclatura.Checked = True Then
-                                                If FormExport.CheckBoxLingua.Checked = True Then
-                                                    strvAl += "HS CODE: " + varTag(idxArt).CodNomenclatura & vbCrLf
-                                                Else
-                                                    strvAl += "COD NOMENCLATURA: " + varTag(idxArt).CodNomenclatura & vbCrLf
-                                                End If
-                                            End If
-
-                                            'MadeIn
-                                            If versione <> VER_35 Then
-                                                If FormExport.CheckBoxMadeIn.Checked = True Then
-                                                    strvAl += "MADE IN: " + varTag(idxArt).MadeIn & vbCrLf
-                                                End If
-                                            End If
-
-
-                                            xlWorkSheet.Cells(idxRow, 2) = strvAl
-                                            xlWorkSheet.Range("B" & idxRow).ColumnWidth = 40
-                                            xlWorkSheet.Cells(idxRow, 2).interior.color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCyan)
-                                            xlWorkSheet.Cells(idxRow, 2).VerticalAlignment = Excel.Constants.xlCenter
-                                            xlWorkSheet.Cells(idxRow, 2).HorizontalAlignment = Excel.Constants.xlLeft
-                                            xlWorkSheet.Cells(idxRow, 2).font.bold = True
-                                            xlWorkSheet.Cells(idxRow, 2).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
-
-                                            stampaTestata = False
-                                            testgiastampata = True
-                                        End If
-
-
-                                        idxRow = idxRow + 2
-                                        xlWorkSheet.Rows(idxRow).RowHeight = 30
-                                        xlWorkSheet.Cells(idxRow, 1) = LabelGiac
-                                        xlWorkSheet.Cells(idxRow, 2) = varTag(idxArt).UM
-                                        xlWorkSheet.Cells(idxRow, 3) = ricalcolatotaleGiacPerEsportazione(idxArt, idxVariante)
-
-                                        xlWorkSheet.Cells(idxRow, 1).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
-                                        xlWorkSheet.Cells(idxRow, 2).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
-                                        xlWorkSheet.Cells(idxRow, 3).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
-
-
-
-
-                                    End If
-                                End If
-                            End If
-
-                            If showCalcolato = True Then
-                                If (exportGiacZero = False) And (varTag(idxArt).TotaleCalc(idxVariante) = 0) Then
-
-                                Else
-                                    'If (exportGiacMinZero = False) And (varTag(idxArt).TotaleCalc(idxVariante) < 0) Then
-                                    If (exportGiacMinZero = False) And (ricalcolatotaleCalcPerEsportazione(idxArt, idxVariante) < 0) Then
-
-                                    Else
-                                        bEsportaVariante = True
-                                        ' calcolato - TODO verificare immagine variante
-                                        'html += vbTab + TAG_ROW
-                                        'If bShowImgVariante = True Then
-                                        '    html += vbTab + TAG_CELL_VARIANTE + "" + TAG_CELL_END
-                                        'End If
-                                        stampaTestata = True
-
-                                        If (stampaTestata = True And testgiastampata = False) Then
-
-                                            idxRow = idxRow - 1
-                                            'codice
-                                            strvAl = ""
-                                            If FormExport.CheckBoxArtCodice.Checked = True Then
-                                                If FormExport.CheckBoxLingua.Checked = True Then
-                                                    strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescrInglese & vbCrLf
-                                                Else
-                                                    strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt + " - " + varTag(idxArt).DescEstesa & vbCrLf
-                                                End If
-                                            End If
-
-                                            'Stagione
-                                            If FormExport.CheckBoxArtStagione.Checked = True Then
-                                                If FormExport.CheckBoxLingua.Checked = True Then
-                                                    strvAl += "SEASON: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf
-                                                Else
-                                                    strvAl += "STAG: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf
-                                                End If
-
-                                            End If
-
-                                            'Famiglia
-                                            If FormExport.CheckBoxArtFamiglia.Checked = True Then
-                                                strvAl += "FAM: " + varTag(idxArt).Famiglia & vbCrLf
-                                            End If
-
-                                            'Famiglia
-                                            If FormExport.CheckBoxArtComposizione.Checked = True Then
-                                                strvAl += "COMP: " + varTag(idxArt).Composizione & vbCrLf
-                                            End If
-
-                                            'Marca
-                                            If FormExport.CheckBoxMarca.Checked = True Then
-                                                If FormExport.CheckBoxLingua.Checked = True Then
-                                                    strvAl += "LINE: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf
-                                                Else
-                                                    strvAl += "LINEA: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf
-                                                End If
-                                            End If
-
-                                            'Nomenclatura
-                                            If FormExport.CheckBoxCodNomenclatura.Checked = True Then
-                                                If FormExport.CheckBoxLingua.Checked = True Then
-                                                    strvAl += "HS CODE: " + varTag(idxArt).CodNomenclatura & vbCrLf
-                                                Else
-                                                    strvAl += "COD NOMENCLATURA: " + varTag(idxArt).CodNomenclatura & vbCrLf
-                                                End If
-                                            End If
-
-                                            'MadeIn
-                                            If versione <> VER_35 Then
-                                                If FormExport.CheckBoxMadeIn.Checked = True Then
-                                                    strvAl += "MADE IN: " + varTag(idxArt).MadeIn & vbCrLf
-                                                End If
-                                            End If
-
-                                            xlWorkSheet.Cells(idxRow, 2) = strvAl
-                                            xlWorkSheet.Range("B" & idxRow).ColumnWidth = 40
-                                            xlWorkSheet.Cells(idxRow, 2).interior.color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCyan)
-                                            xlWorkSheet.Cells(idxRow, 2).VerticalAlignment = Excel.Constants.xlCenter
-                                            xlWorkSheet.Cells(idxRow, 2).HorizontalAlignment = Excel.Constants.xlLeft
-                                            xlWorkSheet.Cells(idxRow, 2).font.bold = True
-                                            xlWorkSheet.Cells(idxRow, 2).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
-
-                                            stampaTestata = False
-                                            testgiastampata = True
-                                        End If
-
-
-
-
-                                        idxRow = idxRow + 2
-                                        xlWorkSheet.Rows(idxRow).RowHeight = 30
-                                        xlWorkSheet.Cells(idxRow, 1) = labelCalc
-                                        xlWorkSheet.Cells(idxRow, 2) = varTag(idxArt).UM
-                                        xlWorkSheet.Cells(idxRow, 3) = ricalcolatotaleCalcPerEsportazione(idxArt, idxVariante)
-
-                                        xlWorkSheet.Cells(idxRow, 1).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
-                                        xlWorkSheet.Cells(idxRow, 2).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
-                                        xlWorkSheet.Cells(idxRow, 3).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
-
-
-
-
                                     End If
                                 End If
                             End If
@@ -4050,8 +4258,6 @@ Public Class FormMain
                     End If
                 End If
 
-
-
                 'idxArt = idxArt + 1
                 Application.DoEvents()
             Next
@@ -4073,6 +4279,58 @@ Public Class FormMain
         End If
 
     End Sub
+
+    Private Function presenzaBuchiTagliaGiac(idxArt As Integer, idxVariante As Integer) As Integer
+        Dim i As Integer
+        Dim posTagMax As Integer = 0
+        Dim bucoTaglia As Integer = 0
+
+        For index = 0 To UBound(varTag(idxArt).Giacenze(idxVariante).Taglie) - 1
+            If varTag(idxArt).Giacenze(idxVariante).Taglie(index) <= "" Then
+                posTagMax = index
+                Exit For
+            End If
+        Next
+
+        For index = 0 To UBound(varTag(idxArt).Giacenze(idxVariante).Giacenze) - 1
+            If varTag(idxArt).Giacenze(idxVariante).Giacenze(index) = 0 And varTag(idxArt).Giacenze(idxVariante).TagValide(index) = 1 Then
+                If index <> 1 And index <> posTagMax Then
+                    bucoTaglia = 1
+                    Exit For
+                End If
+            End If
+        Next
+
+        Return bucoTaglia
+
+    End Function
+
+    Private Function presenzaBuchiTagliaCalc(idxArt As Integer, idxVariante As Integer) As Integer
+        Dim i As Integer
+        Dim posTagMax As Integer = 0
+        Dim bucoTaglia As Integer = 0
+
+        For index = 0 To UBound(varTag(idxArt).Giacenze(idxVariante).Taglie) - 1
+            If varTag(idxArt).Giacenze(idxVariante).Taglie(index) <= "" Then
+                posTagMax = index
+                Exit For
+            End If
+        Next
+
+        If posTagMax = 0 Then posTagMax = UBound(varTag(idxArt).Giacenze(idxVariante).Taglie) - 1
+
+        For index = 0 To UBound(varTag(idxArt).Giacenze(idxVariante).Calcolato) - 1
+            If varTag(idxArt).Giacenze(idxVariante).Calcolato(index) = 0 And varTag(idxArt).Giacenze(idxVariante).TagValide(index) = 1 Then
+                If index <> 1 And index <> posTagMax Then
+                    bucoTaglia = 1
+                    Exit For
+                End If
+            End If
+        Next
+
+        Return bucoTaglia
+
+    End Function
 
     Private Sub stampaImgVariante(codArt As String, Var As String, stag As String, row As Integer, xlsSheet As Excel.Worksheet, mypoints As Double)
         Dim largh As Double

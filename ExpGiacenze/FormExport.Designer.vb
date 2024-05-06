@@ -59,6 +59,7 @@ Partial Class FormExport
         Me.CheckBoxFormatoImgFisso = New System.Windows.Forms.CheckBox()
         Me.CheckBoxImgVariante = New System.Windows.Forms.CheckBox()
         Me.NumericUpDownMaggioriDi = New System.Windows.Forms.NumericUpDown()
+        Me.chkBuchiTaglia = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         CType(Me.NumericUpDownMaxQta, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -157,7 +158,7 @@ Partial Class FormExport
         Me.CheckBoxImgArticolo.AutoSize = True
         Me.CheckBoxImgArticolo.Checked = True
         Me.CheckBoxImgArticolo.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxImgArticolo.Location = New System.Drawing.Point(21, 30)
+        Me.CheckBoxImgArticolo.Location = New System.Drawing.Point(21, 23)
         Me.CheckBoxImgArticolo.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBoxImgArticolo.Name = "CheckBoxImgArticolo"
         Me.CheckBoxImgArticolo.Size = New System.Drawing.Size(185, 20)
@@ -221,7 +222,7 @@ Partial Class FormExport
         Me.CheckBoxTaglie.AutoSize = True
         Me.CheckBoxTaglie.Checked = True
         Me.CheckBoxTaglie.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxTaglie.Location = New System.Drawing.Point(12, 144)
+        Me.CheckBoxTaglie.Location = New System.Drawing.Point(12, 171)
         Me.CheckBoxTaglie.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBoxTaglie.Name = "CheckBoxTaglie"
         Me.CheckBoxTaglie.Size = New System.Drawing.Size(174, 20)
@@ -242,7 +243,7 @@ Partial Class FormExport
         Me.GroupBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox1.Size = New System.Drawing.Size(247, 261)
+        Me.GroupBox1.Size = New System.Drawing.Size(247, 294)
         Me.GroupBox1.TabIndex = 15
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Articolo"
@@ -340,6 +341,7 @@ Partial Class FormExport
         '
         'GroupBox2
         '
+        Me.GroupBox2.Controls.Add(Me.chkBuchiTaglia)
         Me.GroupBox2.Controls.Add(Me.CheckBoxLingua)
         Me.GroupBox2.Controls.Add(Me.NumericUpDownMaxQta)
         Me.GroupBox2.Controls.Add(Me.CheckBoxMaxQta)
@@ -354,7 +356,7 @@ Partial Class FormExport
         Me.GroupBox2.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox2.Size = New System.Drawing.Size(300, 261)
+        Me.GroupBox2.Size = New System.Drawing.Size(300, 294)
         Me.GroupBox2.TabIndex = 16
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Generale"
@@ -362,17 +364,17 @@ Partial Class FormExport
         'CheckBoxLingua
         '
         Me.CheckBoxLingua.AutoSize = True
-        Me.CheckBoxLingua.Location = New System.Drawing.Point(13, 230)
+        Me.CheckBoxLingua.Location = New System.Drawing.Point(13, 257)
         Me.CheckBoxLingua.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBoxLingua.Name = "CheckBoxLingua"
-        Me.CheckBoxLingua.Size = New System.Drawing.Size(241, 25)
+        Me.CheckBoxLingua.Size = New System.Drawing.Size(193, 20)
         Me.CheckBoxLingua.TabIndex = 20
         Me.CheckBoxLingua.Text = "Descrizioni in lingua italiano"
         Me.CheckBoxLingua.UseVisualStyleBackColor = True
         '
         'NumericUpDownMaxQta
         '
-        Me.NumericUpDownMaxQta.Location = New System.Drawing.Point(224, 198)
+        Me.NumericUpDownMaxQta.Location = New System.Drawing.Point(224, 225)
         Me.NumericUpDownMaxQta.Margin = New System.Windows.Forms.Padding(4)
         Me.NumericUpDownMaxQta.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDownMaxQta.Name = "NumericUpDownMaxQta"
@@ -385,7 +387,7 @@ Partial Class FormExport
         Me.CheckBoxMaxQta.AutoSize = True
         Me.CheckBoxMaxQta.Checked = True
         Me.CheckBoxMaxQta.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxMaxQta.Location = New System.Drawing.Point(13, 202)
+        Me.CheckBoxMaxQta.Location = New System.Drawing.Point(13, 229)
         Me.CheckBoxMaxQta.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBoxMaxQta.Name = "CheckBoxMaxQta"
         Me.CheckBoxMaxQta.Size = New System.Drawing.Size(191, 20)
@@ -395,7 +397,7 @@ Partial Class FormExport
         '
         'NumericUpDownInterrPag
         '
-        Me.NumericUpDownInterrPag.Location = New System.Drawing.Point(241, 167)
+        Me.NumericUpDownInterrPag.Location = New System.Drawing.Point(241, 194)
         Me.NumericUpDownInterrPag.Margin = New System.Windows.Forms.Padding(4)
         Me.NumericUpDownInterrPag.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDownInterrPag.Name = "NumericUpDownInterrPag"
@@ -408,7 +410,7 @@ Partial Class FormExport
         Me.CheckBoxInterPag.AutoSize = True
         Me.CheckBoxInterPag.Checked = True
         Me.CheckBoxInterPag.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxInterPag.Location = New System.Drawing.Point(13, 171)
+        Me.CheckBoxInterPag.Location = New System.Drawing.Point(13, 198)
         Me.CheckBoxInterPag.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBoxInterPag.Name = "CheckBoxInterPag"
         Me.CheckBoxInterPag.Size = New System.Drawing.Size(206, 20)
@@ -433,11 +435,11 @@ Partial Class FormExport
         '
         Me.GroupBox3.Controls.Add(Me.CheckBoxExpLisAcquisto)
         Me.GroupBox3.Controls.Add(Me.CheckBoxExpLisVendita)
-        Me.GroupBox3.Location = New System.Drawing.Point(17, 284)
+        Me.GroupBox3.Location = New System.Drawing.Point(17, 317)
         Me.GroupBox3.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox3.Size = New System.Drawing.Size(299, 155)
+        Me.GroupBox3.Size = New System.Drawing.Size(299, 122)
         Me.GroupBox3.TabIndex = 17
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Listini"
@@ -447,7 +449,7 @@ Partial Class FormExport
         Me.CheckBoxExpLisAcquisto.AutoSize = True
         Me.CheckBoxExpLisAcquisto.Checked = True
         Me.CheckBoxExpLisAcquisto.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxExpLisAcquisto.Location = New System.Drawing.Point(9, 30)
+        Me.CheckBoxExpLisAcquisto.Location = New System.Drawing.Point(12, 23)
         Me.CheckBoxExpLisAcquisto.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBoxExpLisAcquisto.Name = "CheckBoxExpLisAcquisto"
         Me.CheckBoxExpLisAcquisto.Size = New System.Drawing.Size(210, 20)
@@ -460,7 +462,7 @@ Partial Class FormExport
         Me.CheckBoxExpLisVendita.AutoSize = True
         Me.CheckBoxExpLisVendita.Checked = True
         Me.CheckBoxExpLisVendita.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBoxExpLisVendita.Location = New System.Drawing.Point(11, 58)
+        Me.CheckBoxExpLisVendita.Location = New System.Drawing.Point(14, 51)
         Me.CheckBoxExpLisVendita.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBoxExpLisVendita.Name = "CheckBoxExpLisVendita"
         Me.CheckBoxExpLisVendita.Size = New System.Drawing.Size(203, 20)
@@ -473,11 +475,11 @@ Partial Class FormExport
         Me.GroupBox4.Controls.Add(Me.CheckBoxFormatoImgFisso)
         Me.GroupBox4.Controls.Add(Me.CheckBoxImgVariante)
         Me.GroupBox4.Controls.Add(Me.CheckBoxImgArticolo)
-        Me.GroupBox4.Location = New System.Drawing.Point(333, 284)
+        Me.GroupBox4.Location = New System.Drawing.Point(333, 317)
         Me.GroupBox4.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox4.Name = "GroupBox4"
         Me.GroupBox4.Padding = New System.Windows.Forms.Padding(4)
-        Me.GroupBox4.Size = New System.Drawing.Size(247, 155)
+        Me.GroupBox4.Size = New System.Drawing.Size(247, 122)
         Me.GroupBox4.TabIndex = 18
         Me.GroupBox4.TabStop = False
         Me.GroupBox4.Text = "Immagini"
@@ -485,7 +487,7 @@ Partial Class FormExport
         'CheckBoxFormatoImgFisso
         '
         Me.CheckBoxFormatoImgFisso.AutoSize = True
-        Me.CheckBoxFormatoImgFisso.Location = New System.Drawing.Point(21, 86)
+        Me.CheckBoxFormatoImgFisso.Location = New System.Drawing.Point(21, 79)
         Me.CheckBoxFormatoImgFisso.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBoxFormatoImgFisso.Name = "CheckBoxFormatoImgFisso"
         Me.CheckBoxFormatoImgFisso.Size = New System.Drawing.Size(208, 20)
@@ -496,7 +498,7 @@ Partial Class FormExport
         'CheckBoxImgVariante
         '
         Me.CheckBoxImgVariante.AutoSize = True
-        Me.CheckBoxImgVariante.Location = New System.Drawing.Point(21, 58)
+        Me.CheckBoxImgVariante.Location = New System.Drawing.Point(21, 51)
         Me.CheckBoxImgVariante.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBoxImgVariante.Name = "CheckBoxImgVariante"
         Me.CheckBoxImgVariante.Size = New System.Drawing.Size(189, 20)
@@ -510,6 +512,19 @@ Partial Class FormExport
         Me.NumericUpDownMaggioriDi.Name = "NumericUpDownMaggioriDi"
         Me.NumericUpDownMaggioriDi.Size = New System.Drawing.Size(120, 22)
         Me.NumericUpDownMaggioriDi.TabIndex = 0
+        '
+        'chkBuchiTaglia
+        '
+        Me.chkBuchiTaglia.AutoSize = True
+        Me.chkBuchiTaglia.Checked = True
+        Me.chkBuchiTaglia.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkBuchiTaglia.Location = New System.Drawing.Point(12, 141)
+        Me.chkBuchiTaglia.Margin = New System.Windows.Forms.Padding(4)
+        Me.chkBuchiTaglia.Name = "chkBuchiTaglia"
+        Me.chkBuchiTaglia.Size = New System.Drawing.Size(205, 20)
+        Me.chkBuchiTaglia.TabIndex = 21
+        Me.chkBuchiTaglia.Text = "Esporta righe con buchi taglia"
+        Me.chkBuchiTaglia.UseVisualStyleBackColor = True
         '
         'FormExport
         '
@@ -587,4 +602,5 @@ Partial Class FormExport
     Friend WithEvents NumericUpDownMaggioriDi As NumericUpDown
     Friend WithEvents CheckBoxMaxQta As CheckBox
     Friend WithEvents CheckBoxLingua As CheckBox
+    Friend WithEvents chkBuchiTaglia As CheckBox
 End Class

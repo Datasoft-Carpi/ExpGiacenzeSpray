@@ -125,15 +125,12 @@ Public Class FormExport
 
             TextBoxDispTeorica.Text = "Disp. Teorica"
 
-
         End Try
 
 
         If FormMain.versione = FormMain.VER_35 Then
             CheckBoxArtComposizione.Checked = False
             CheckBoxArtComposizione.Visible = False
-
-
 
             CheckBoxMadeIn.Checked = False
             CheckBoxMadeIn.Visible = False
