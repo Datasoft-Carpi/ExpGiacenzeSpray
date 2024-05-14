@@ -302,7 +302,7 @@ Public Class FormMain
             SQL = SQL & " LEFT OUTER JOIN Marche As [Marche] On (ArtAnagrafica.CodMarca = Marche.CodMarca And (Marche.DBGruppo=ArtAnagrafica.DBGruppo)) "
             SQL = SQL & " LEFT OUTER JOIN ModaTabellaLinee As [ModaTabellaLinee] On (ModaArticoli.CodLinea = ModaTabellaLinee.CodiceLinea And (ModaArticoli.DBGruppo=ModaTabellaLinee.DBGruppo)) "
 
-            SQL = SQL & " WHERE (ArtAnagrafica.TipoAnagr = 1) AND ModaArticoli.codstagione <> '' "
+            SQL = SQL & " WHERE (ArtAnagrafica.TipoAnagr = 1) "
             SQL = SQL & " And (ArtAnagrafica.CodArt BETWEEN '" & CODARTICOLO_DA & "' AND '" & CODARTICOLO_A & "') "
 
             If FAMIGLIA_DA <> "" Then
