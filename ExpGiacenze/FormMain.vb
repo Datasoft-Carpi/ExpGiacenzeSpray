@@ -406,10 +406,6 @@ Public Class FormMain
                 End If
             End If
 
-            'If getDbNullStr(rsGlobale.Fields("CodMarca").Value) <> "" Then
-            '    currentDescEstesa = currentDescEstesa & "Marca: " & rsGlobale.Fields("CodMarca").Value & " - " & rsGlobale.Fields("DesMarca").Value & vbCrLf
-            'End If
-
             If getDbNullStr(rsGlobale.Fields("CodLinea").Value) <> "" Then
                 currentDescEstesa = currentDescEstesa & "Linea: " & rsGlobale.Fields("CodLinea").Value & " - " & rsGlobale.Fields("DesLinea").Value & vbCrLf
             End If
@@ -685,8 +681,8 @@ Public Class FormMain
         Dim SQL As String
 
         SQL = "      SELECT                                                     "
-        SQL = SQL & "            ModaProgMagCor.GtgCart AS [GtgCart],                       "
-        SQL = SQL & "            ModaProgMagCor.GtgVarart As [GtgVarart],                   "
+        SQL = SQL & "            MagProgrArticoli.CodArt AS [GtgCart],                       "
+        SQL = SQL & "            MagProgrArticoli.VarianteArt As [GtgVarart],                   "
         SQL = SQL & "            ArtConfigVariante.descrizione AS [descrizione],            "
         SQL = SQL & "            ArtDatiInLingua.DesEstesa AS [DescrInglese],               "
         SQL = SQL & "            Sum(MagProgrArticoli.qtaGiacUMMag) As [qtaGiacUMMag],      "
@@ -875,19 +871,19 @@ Public Class FormMain
         SQL = SQL & "            sum(JSV_IMPORD_AVMA_D.QtaODCUm30) As [QtaODCUm30]"
         SQL = SQL & "            FROM MagProgrArticoli As [MagProgrArticoli]"
         SQL = SQL & "            LEFT OUTER JOIN ModaProgMagCor As [ModaProgMagCor] On (ModaProgMagCor.GtgCart=MagProgrArticoli.CodArt And ModaProgMagCor.GtgVarart = MagProgrArticoli.varianteart And ModaProgMagCor.Gtgcmag= MagProgrArticoli.codmag And ModaProgMagCor.DBGruppo=MagProgrArticoli.DBGruppo and ModaProgMagCor.GtgCcom = MagProgrArticoli.CodAreaMag)"
-        SQL = SQL & "            LEFT OUTER JOIN ModaArticoli As [ModaArticoli] On (ModaArticoli.CodiceArticolo=ModaProgMagCor.GtgCart And (ModaArticoli.DBGruppo=ModaProgMagCor.DBGruppo))"
+        SQL = SQL & "            LEFT OUTER JOIN ModaArticoli As [ModaArticoli] On (ModaArticoli.CodiceArticolo=MagProgrArticoli.Codart And (ModaArticoli.DBGruppo=MagProgrArticoli.DBGruppo))"
 
         SQL = SQL & "            LEFT OUTER JOIN ESV_IMPORD_AVMA_S As [ESV_IMPORD_AVMA_S] On (ESV_IMPORD_AVMA_S.CodArt=MagProgrArticoli.codArt And ESV_IMPORD_AVMA_S.VarianteArt=MagProgrArticoli.VarianteArt And ESV_IMPORD_AVMA_S.DBGruppo=MagProgrArticoli.DBGruppo and ESV_IMPORD_AVMA_S.CodAreaMag = MagProgrArticoli.CodAreaMag and ESV_IMPORD_AVMA_S.codmag = MagProgrArticoli.codmag )"
-        SQL = SQL & "            LEFT OUTER JOIN JSV_IMPE_AVMA_D As [JSV_IMPE_AVMA_D] On (JSV_IMPE_AVMA_D.CodArt=ModaProgMagCor.GtgCart And JSV_IMPE_AVMA_D.VarianteArt=ModaProgMagCor.GtgVarart And (JSV_IMPE_AVMA_D.DBGruppo=ModaProgMagCor.DBGruppo)  and JSV_IMPE_AVMA_D.CodMag = ModaProgMagCor.GtgCMag AND JSV_IMPE_AVMA_D.CodAreaMag = ModaProgMagCor.GtgCCom)"
-        SQL = SQL & "            LEFT OUTER JOIN JSV_IMPORD_AVMA_D As [JSV_IMPORD_AVMA_D] On (JSV_IMPORD_AVMA_D.CodArt=ModaProgMagCor.GtgCart And JSV_IMPORD_AVMA_D.VarianteArt=ModaProgMagCor.GtgVarart  And (JSV_IMPORD_AVMA_D.DBGruppo=ModaProgMagCor.DBGruppo)  and JSV_IMPORD_AVMA_D.CodMag = ModaProgMagCor.GtgCMag and JSV_IMPORD_AVMA_D.CodAreaMag = ModaProgMagCor.GtgCCom)"
+        SQL = SQL & "            LEFT OUTER JOIN JSV_IMPE_AVMA_D As [JSV_IMPE_AVMA_D] On (JSV_IMPE_AVMA_D.CodArt=MagProgrArticoli.codArt And JSV_IMPE_AVMA_D.VarianteArt=MagProgrArticoli.VarianteArt And (JSV_IMPE_AVMA_D.DBGruppo=MagProgrArticoli.DBGruppo)  and JSV_IMPE_AVMA_D.CodMag = MagProgrArticoli.codmag AND JSV_IMPE_AVMA_D.CodAreaMag = MagProgrArticoli.CodAreaMag)"
+        SQL = SQL & "            LEFT OUTER JOIN JSV_IMPORD_AVMA_D As [JSV_IMPORD_AVMA_D] On (JSV_IMPORD_AVMA_D.CodArt=MagProgrArticoli.codArt And JSV_IMPORD_AVMA_D.VarianteArt=MagProgrArticoli.VarianteArt  And (JSV_IMPORD_AVMA_D.DBGruppo=MagProgrArticoli.DBGruppo)  and JSV_IMPORD_AVMA_D.CodMag = MagProgrArticoli.codmag and JSV_IMPORD_AVMA_D.CodAreaMag = MagProgrArticoli.CodAreaMag)"
 
         SQL = SQL & "            LEFT OUTER JOIN ModaTabellaTaglie As [ModaTabellaTaglie] On (ModaTabellaTaglie.CodiceTabellaTaglie=ModaArticoli.CodiceTabellaTaglie And (ModaTabellaTaglie.DBGruppo=ModaArticoli.DBGruppo))"
-        SQL = SQL & "            LEFT OUTER JOIN ArtConfigVariante As [ArtConfigVariante] On ((ArtConfigVariante.CodArt=ModaProgMagCor.GtgCart) And (ArtConfigVariante.VarianteArt=ModaProgMagCor.GtgVarart) And (ArtConfigVariante.DBGruppo=ModaArticoli.DBGruppo))"
+        SQL = SQL & "            LEFT OUTER JOIN ArtConfigVariante As [ArtConfigVariante] On ((ArtConfigVariante.CodArt=MagProgrArticoli.CodArt) And (ArtConfigVariante.VarianteArt=MagProgrArticoli.VarianteArt) And (ArtConfigVariante.DBGruppo=MagProgrArticoli.DBGruppo))"
 
         SQL = SQL & "            LEFT OUTER JOIN ArtDatiInLingua As [ArtDatiInLingua] On ((ArtDatiInLingua.CodArt=ArtConfigVariante.CodArt) And (ArtDatiInLingua.VarianteArt=ArtConfigVariante.VarianteArt) And ArtDatiInLingua.CodLingua=1 And (ArtDatiInLingua.DbGruppo=ArtConfigVariante.DBGruppo))"
 
-        SQL = SQL & " WHERE (ModaProgMagCor.GtgCart = '" & Replace(Trim(codArt), "'", "''") & "') "
-        SQL = SQL & " AND (ModaProgMagCor.Gtgcmag in " & CODMAGAZZINO & ")"
+        SQL = SQL & " WHERE (MagProgrArticoli.CodArt = '" & Replace(Trim(codArt), "'", "''") & "') "
+        SQL = SQL & " AND (MagProgrArticoli.Codmag in " & CODMAGAZZINO & ")"
 
         If CODTAG <> "" Then
             SQL = SQL & "AND ( "
@@ -923,12 +919,14 @@ Public Class FormMain
             SQL = SQL & " (ModaTabellaTaglie.CodiciTaglie_30 IN ('" + CODTAG + "') ) ) "
         End If
 
-        SQL = SQL & " AND (ModaProgMagCor.GtgQgp1+ModaProgMagCor.GtgQgp2+ModaProgMagCor.GtgQgp3+ModaProgMagCor.GtgQgp4+ModaProgMagCor.GtgQgp5+ModaProgMagCor.GtgQgp6+ModaProgMagCor.GtgQgp7+ModaProgMagCor.GtgQgp8+ModaProgMagCor.GtgQgp9+ModaProgMagCor.GtgQgp10+"
+        SQL = SQL & " AND ((ModaProgMagCor.GtgQgp1+ModaProgMagCor.GtgQgp2+ModaProgMagCor.GtgQgp3+ModaProgMagCor.GtgQgp4+ModaProgMagCor.GtgQgp5+ModaProgMagCor.GtgQgp6+ModaProgMagCor.GtgQgp7+ModaProgMagCor.GtgQgp8+ModaProgMagCor.GtgQgp9+ModaProgMagCor.GtgQgp10+"
         SQL = SQL & "ModaProgMagCor.GtgQgp11+ModaProgMagCor.GtgQgp12+ModaProgMagCor.GtgQgp13+ModaProgMagCor.GtgQgp14+ModaProgMagCor.GtgQgp15+ModaProgMagCor.GtgQgp16+ModaProgMagCor.GtgQgp17+ModaProgMagCor.GtgQgp18+ModaProgMagCor.GtgQgp19+ModaProgMagCor.GtgQgp20+"
         SQL = SQL & "ModaProgMagCor.GtgQgp21+ModaProgMagCor.GtgQgp22+ModaProgMagCor.GtgQgp23+ModaProgMagCor.GtgQgp24+ModaProgMagCor.GtgQgp25+ModaProgMagCor.GtgQgp26+ModaProgMagCor.GtgQgp27+ModaProgMagCor.GtgQgp28+ModaProgMagCor.GtgQgp29+ModaProgMagCor.GtgQgp30) > 0"
 
-        SQL = SQL & " AND (ModaProgMagCor.DBGruppo='" & CODGRUPPO & "')"
-        SQL = SQL & "            group by GtgCart, GtgVarart, ArtConfigVariante.descrizione, ArtDatiInLingua.DesEstesa, "
+        SQL = SQL & " OR (JSV_IMPE_AVMA_D.qtimpconf1+JSV_IMPE_AVMA_D.qtimpconf2+JSV_IMPE_AVMA_D.qtimpconf3+JSV_IMPE_AVMA_D.qtimpconf4+JSV_IMPE_AVMA_D.qtimpconf5+JSV_IMPE_AVMA_D.qtimpconf6+JSV_IMPE_AVMA_D.qtimpconf7+JSV_IMPE_AVMA_D.qtimpconf8+JSV_IMPE_AVMA_D.qtimpconf9+JSV_IMPE_AVMA_D.qtimpconf10+JSV_IMPE_AVMA_D.qtimpconf11+JSV_IMPE_AVMA_D.qtimpconf12+JSV_IMPE_AVMA_D.qtimpconf13+JSV_IMPE_AVMA_D.qtimpconf14+JSV_IMPE_AVMA_D.qtimpconf15+JSV_IMPE_AVMA_D.qtimpconf16+JSV_IMPE_AVMA_D.qtimpconf17+JSV_IMPE_AVMA_D.qtimpconf18+JSV_IMPE_AVMA_D.qtimpconf19+JSV_IMPE_AVMA_D.qtimpconf20+JSV_IMPE_AVMA_D.qtimpconf21+JSV_IMPE_AVMA_D.qtimpconf22+JSV_IMPE_AVMA_D.qtimpconf23+JSV_IMPE_AVMA_D.qtimpconf24+JSV_IMPE_AVMA_D.qtimpconf25+JSV_IMPE_AVMA_D.qtimpconf26+JSV_IMPE_AVMA_D.qtimpconf27+JSV_IMPE_AVMA_D.qtimpconf28+JSV_IMPE_AVMA_D.qtimpconf29+JSV_IMPE_AVMA_D.qtimpconf30) > 0)"
+
+        SQL = SQL & " AND (MagProgrArticoli.DBGruppo='" & CODGRUPPO & "')"
+        SQL = SQL & "            group by MagProgrArticoli.CodArt, MagProgrArticoli.VarianteArt, ArtConfigVariante.descrizione, ArtDatiInLingua.DesEstesa, "
         SQL = SQL & "            ModaArticoli.CodiceTabellaTaglie,  "
         SQL = SQL & "            ModaTabellaTaglie.CodiciTaglie_1,  "
         SQL = SQL & "            ModaTabellaTaglie.CodiciTaglie_2,  "
@@ -3483,21 +3481,6 @@ Public Class FormMain
 
                     End Select
                 Next
-
-
-                'idxRow = idxRow + 1
-                '--------------------
-                ' TODO - VERIFICARE  Varianti
-                'html += vbTab + TAG_TABLE_VUOTO + vbNewLine
-                'html += vbTab + TAG_TABLE_FIXED + vbNewLine
-                'If bShowImgVariante = True Then
-                '    html += vbTab + "<col width=""100px"" />" + vbNewLine
-                'End If
-                'html += vbTab + "<col width=""300px"" />" + vbNewLine
-                'For i = 1 To 100
-                '    html += vbTab + "<col width=""30px"" />" + vbNewLine
-
-                'Next
 
 
                 If Not varTag(idxArt).Varianti Is Nothing Then
