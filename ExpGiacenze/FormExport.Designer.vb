@@ -46,6 +46,7 @@ Partial Class FormExport
         Me.CheckBoxArtStagione = New System.Windows.Forms.CheckBox()
         Me.CheckBoxArtCodice = New System.Windows.Forms.CheckBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.chkBuchiTaglia = New System.Windows.Forms.CheckBox()
         Me.CheckBoxLingua = New System.Windows.Forms.CheckBox()
         Me.NumericUpDownMaxQta = New System.Windows.Forms.NumericUpDown()
         Me.CheckBoxMaxQta = New System.Windows.Forms.CheckBox()
@@ -59,7 +60,6 @@ Partial Class FormExport
         Me.CheckBoxFormatoImgFisso = New System.Windows.Forms.CheckBox()
         Me.CheckBoxImgVariante = New System.Windows.Forms.CheckBox()
         Me.NumericUpDownMaggioriDi = New System.Windows.Forms.NumericUpDown()
-        Me.chkBuchiTaglia = New System.Windows.Forms.CheckBox()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         CType(Me.NumericUpDownMaxQta, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -361,6 +361,19 @@ Partial Class FormExport
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Generale"
         '
+        'chkBuchiTaglia
+        '
+        Me.chkBuchiTaglia.AutoSize = True
+        Me.chkBuchiTaglia.Checked = True
+        Me.chkBuchiTaglia.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkBuchiTaglia.Location = New System.Drawing.Point(12, 141)
+        Me.chkBuchiTaglia.Margin = New System.Windows.Forms.Padding(4)
+        Me.chkBuchiTaglia.Name = "chkBuchiTaglia"
+        Me.chkBuchiTaglia.Size = New System.Drawing.Size(205, 20)
+        Me.chkBuchiTaglia.TabIndex = 21
+        Me.chkBuchiTaglia.Text = "Esporta righe con buchi taglia"
+        Me.chkBuchiTaglia.UseVisualStyleBackColor = True
+        '
         'CheckBoxLingua
         '
         Me.CheckBoxLingua.AutoSize = True
@@ -487,6 +500,8 @@ Partial Class FormExport
         'CheckBoxFormatoImgFisso
         '
         Me.CheckBoxFormatoImgFisso.AutoSize = True
+        Me.CheckBoxFormatoImgFisso.Checked = True
+        Me.CheckBoxFormatoImgFisso.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBoxFormatoImgFisso.Location = New System.Drawing.Point(21, 79)
         Me.CheckBoxFormatoImgFisso.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBoxFormatoImgFisso.Name = "CheckBoxFormatoImgFisso"
@@ -498,6 +513,8 @@ Partial Class FormExport
         'CheckBoxImgVariante
         '
         Me.CheckBoxImgVariante.AutoSize = True
+        Me.CheckBoxImgVariante.Checked = True
+        Me.CheckBoxImgVariante.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBoxImgVariante.Location = New System.Drawing.Point(21, 51)
         Me.CheckBoxImgVariante.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBoxImgVariante.Name = "CheckBoxImgVariante"
@@ -512,19 +529,6 @@ Partial Class FormExport
         Me.NumericUpDownMaggioriDi.Name = "NumericUpDownMaggioriDi"
         Me.NumericUpDownMaggioriDi.Size = New System.Drawing.Size(120, 22)
         Me.NumericUpDownMaggioriDi.TabIndex = 0
-        '
-        'chkBuchiTaglia
-        '
-        Me.chkBuchiTaglia.AutoSize = True
-        Me.chkBuchiTaglia.Checked = True
-        Me.chkBuchiTaglia.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkBuchiTaglia.Location = New System.Drawing.Point(12, 141)
-        Me.chkBuchiTaglia.Margin = New System.Windows.Forms.Padding(4)
-        Me.chkBuchiTaglia.Name = "chkBuchiTaglia"
-        Me.chkBuchiTaglia.Size = New System.Drawing.Size(205, 20)
-        Me.chkBuchiTaglia.TabIndex = 21
-        Me.chkBuchiTaglia.Text = "Esporta righe con buchi taglia"
-        Me.chkBuchiTaglia.UseVisualStyleBackColor = True
         '
         'FormExport
         '

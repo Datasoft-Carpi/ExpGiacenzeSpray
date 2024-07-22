@@ -285,7 +285,7 @@ Public Class FormMain
             SQL = SQL & " ArtDatiInLingua.DesEstesa AS [DescrizioneInglese], "
 
             SQL = SQL & " 1 AS [Contatore]"
-            SQL = SQL & ", ArtAnagrafica.StorSostDaCodArt AS [ArticoloSostitutivo] "
+            'SQL = SQL & ", ArtAnagrafica.StorSostDaCodArt AS [ArticoloSostitutivo] "
             SQL = SQL & " FROM ArtAnagrafica "
             SQL = SQL & " LEFT OUTER JOIN ModaArticoli AS [ModaArticoli] ON (ModaArticoli.CodiceArticolo=ArtAnagrafica.CodArt AND (ModaArticoli.DBGruppo=ArtAnagrafica.DBGruppo))"
             SQL = SQL & " LEFT OUTER JOIN Famiglia AS [Famiglia] ON (Famiglia.CodFamiglia=ArtAnagrafica.CodFamiglia AND (Famiglia.DBGruppo=ArtAnagrafica.DBGruppo))"
@@ -326,7 +326,10 @@ Public Class FormMain
             End If
 
             SQL = SQL & " AND (ArtAnagrafica.DBGruppo='" & CODGRUPPO & "') "
-            SQL = SQL & " AND (ArtAnagrafica.TipoArt BETWEEN '" & TIPOART_DA & "' AND '" & TIPOART_A & "') "
+
+            If TIPOART_DA <> 9 Then
+                SQL = SQL & " AND (ArtAnagrafica.TipoArt = '" & TIPOART_DA & "') "
+            End If
 
 
             For i = 1 To 20
@@ -3543,7 +3546,8 @@ Public Class FormMain
                         mypoints = 0
                         stampaImgVariante(varTag(idxArt).CodArt, varTag(idxArt).CodVariante(idxVariante), varTag(idxArt).DescStag, idxRow, xlWorkSheet, mypoints)
 
-                        xlWorkSheet.Rows(idxRow).RowHeight = 120
+                        'xlWorkSheet.Rows(idxRow).RowHeight = 120
+                        xlWorkSheet.Rows(idxRow).RowHeight = 35
                         xlWorkSheet.Cells(idxRow, 2) = varTag(idxArt).Varianti(idxVariante)
                         xlWorkSheet.Cells(idxRow, 2).interior.color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCyan)
                         xlWorkSheet.Cells(idxRow, 2).font.bold = True
@@ -3555,28 +3559,29 @@ Public Class FormMain
 
                         If bTaglieSempre = True Or indexPrimaRigaTaglia = 0 Then
                             ' controlla se mostrare l'immagine variante
-                            xlWorkSheet.Cells(idxRow, 3) = "UM"
-                            xlWorkSheet.Cells(idxRow, 4) = "TOT"
+                            'xlWorkSheet.Cells(idxRow, 3) = "UM"
+                            xlWorkSheet.Cells(idxRow, 3) = "TOT"
                         Else
+                            'xlWorkSheet.Cells(idxRow, 3) = ""
                             xlWorkSheet.Cells(idxRow, 3) = ""
-                            xlWorkSheet.Cells(idxRow, 4) = ""
 
                         End If
                         xlWorkSheet.Cells(idxRow, 3).interior.color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCyan)
-                        xlWorkSheet.Cells(idxRow, 4).interior.color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCyan)
+                        'xlWorkSheet.Cells(idxRow, 4).interior.color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCyan)
 
                         xlWorkSheet.Cells(idxRow, 3).font.bold = True
-                        xlWorkSheet.Cells(idxRow, 4).font.bold = True
+                        'xlWorkSheet.Cells(idxRow, 4).font.bold = True
 
                         xlWorkSheet.Cells(idxRow, 3).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
-                        xlWorkSheet.Cells(idxRow, 4).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
+                        'xlWorkSheet.Cells(idxRow, 4).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
 
                         xlWorkSheet.Cells(idxRow, 3).HorizontalAlignment = Excel.Constants.xlCenter
-                        xlWorkSheet.Cells(idxRow, 4).HorizontalAlignment = Excel.Constants.xlCenter
+                        'xlWorkSheet.Cells(idxRow, 4).HorizontalAlignment = Excel.Constants.xlCenter
 
                         xlWorkSheet.Cells(idxRow, 3).VerticalAlignment = Excel.Constants.xlCenter
-                        xlWorkSheet.Cells(idxRow, 4).VerticalAlignment = Excel.Constants.xlCenter
+                        'xlWorkSheet.Cells(idxRow, 4).VerticalAlignment = Excel.Constants.xlCenter
 
+                        xlWorkSheet.Cells(idxRow, 3).Font.size = 9
 
                         If (stampaTestata = True And testgiastampata = False) Then
                             idxRow = idxRow - 1
@@ -3656,7 +3661,7 @@ Public Class FormMain
                             If Not varTag(idxArt).Giacenze(0).Giacenze Is Nothing Then
 
                                 'intestazione taglie
-                                Dim idxColonna As Integer = 5
+                                Dim idxColonna As Integer = 4
                                 For idxTaglia = 0 To UBound(varTag(idxArt).Giacenze(0).Taglie) - 1
                                     If Array.IndexOf(escludiTg, varTag(idxArt).Giacenze(idxVariante).Taglie(idxTaglia).ToString) >= 0 Then
                                         Continue For
@@ -3668,13 +3673,16 @@ Public Class FormMain
                                     Else
                                         xlWorkSheet.Cells(idxRow, idxColonna) = ""
                                     End If
-                                    xlWorkSheet.Rows(idxRow).RowHeight = 120
-                                    xlWorkSheet.Cells(idxRow, idxColonna).interior.color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCyan)
+                                    'xlWorkSheet.Rows(idxRow).RowHeight = 120
+                                    xlWorkSheet.Rows(idxRow).RowHeight = 35
+                                    'xlWorkSheet.Cells(idxRow, idxColonna).interior.color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCyan)
                                     xlWorkSheet.Cells(idxRow, idxColonna).font.bold = True
                                     xlWorkSheet.Cells(idxRow, idxColonna).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
 
                                     xlWorkSheet.Cells(idxRow, idxColonna).HorizontalAlignment = Excel.Constants.xlCenter
                                     xlWorkSheet.Cells(idxRow, idxColonna).VerticalAlignment = Excel.Constants.xlCenter
+
+                                    xlWorkSheet.Cells(idxRow, idxColonna).Font.size = 9
 
                                     idxColonna = idxColonna + 1
                                     Application.DoEvents()
@@ -3765,16 +3773,19 @@ Public Class FormMain
 
 
                                                 idxRow = idxRow + 1
-                                                xlWorkSheet.Rows(idxRow).RowHeight = 30
+                                                'xlWorkSheet.Rows(idxRow).RowHeight = 30
+                                                xlWorkSheet.Rows(idxRow).RowHeight = 18
                                                 xlWorkSheet.Cells(idxRow, 2) = LabelGiac
-                                                xlWorkSheet.Cells(idxRow, 3) = varTag(idxArt).UM
-                                                xlWorkSheet.Cells(idxRow, 4) = ricalcolatotaleGiacPerEsportazione(idxArt, idxVariante)
+                                                'xlWorkSheet.Cells(idxRow, 3) = varTag(idxArt).UM
+                                                xlWorkSheet.Cells(idxRow, 3) = ricalcolatotaleGiacPerEsportazione(idxArt, idxVariante)
 
                                                 xlWorkSheet.Cells(idxRow, 2).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
+                                                'xlWorkSheet.Cells(idxRow, 3).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
                                                 xlWorkSheet.Cells(idxRow, 3).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
-                                                xlWorkSheet.Cells(idxRow, 4).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
+                                                xlWorkSheet.Cells(idxRow, 3).font.bold = True
+                                                xlWorkSheet.Cells(idxRow, 3).Font.size = 9
 
-                                                idxColonna = 5
+                                                idxColonna = 4
                                                 For idxTaglia = 0 To UBound(varTag(idxArt).Giacenze(0).Giacenze) - 1
                                                     If Array.IndexOf(escludiTg, varTag(idxArt).Giacenze(idxVariante).Taglie(idxTaglia).ToString) >= 0 Then
                                                         Continue For
@@ -3795,9 +3806,11 @@ Public Class FormMain
                                                     End If
 
 
-                                                    xlWorkSheet.Rows(idxRow).RowHeight = 30
+                                                    'xlWorkSheet.Rows(idxRow).RowHeight = 30
+                                                    xlWorkSheet.Rows(idxRow).RowHeight = 18
                                                     xlWorkSheet.Cells(idxRow, idxColonna) = strOutVal
                                                     xlWorkSheet.Cells(idxRow, idxColonna).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
+                                                    xlWorkSheet.Cells(idxRow, idxColonna).Font.size = 9
 
                                                     idxColonna = idxColonna + 1
                                                     Application.DoEvents()
@@ -3894,16 +3907,19 @@ Public Class FormMain
                                                 ' calcolato
 
                                                 idxRow = idxRow + 1
-                                                xlWorkSheet.Rows(idxRow).RowHeight = 30
+                                                'xlWorkSheet.Rows(idxRow).RowHeight = 30
+                                                xlWorkSheet.Rows(idxRow).RowHeight = 18
                                                 xlWorkSheet.Cells(idxRow, 2) = labelCalc
-                                                xlWorkSheet.Cells(idxRow, 3) = varTag(idxArt).UM
-                                                xlWorkSheet.Cells(idxRow, 4) = ricalcolatotaleCalcPerEsportazione(idxArt, idxVariante)
+                                                'xlWorkSheet.Cells(idxRow, 3) = varTag(idxArt).UM
+                                                xlWorkSheet.Cells(idxRow, 3) = ricalcolatotaleCalcPerEsportazione(idxArt, idxVariante)
 
                                                 xlWorkSheet.Cells(idxRow, 2).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
+                                                'xlWorkSheet.Cells(idxRow, 3).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
                                                 xlWorkSheet.Cells(idxRow, 3).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
-                                                xlWorkSheet.Cells(idxRow, 4).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
+                                                xlWorkSheet.Cells(idxRow, 3).font.bold = True
+                                                xlWorkSheet.Cells(idxRow, 3).Font.size = 9
 
-                                                idxColonna = 5
+                                                idxColonna = 4
                                                 For idxTaglia = 0 To UBound(varTag(idxArt).Giacenze(0).Calcolato) - 1
                                                     If Array.IndexOf(escludiTg, varTag(idxArt).Giacenze(idxVariante).Taglie(idxTaglia).ToString) >= 0 Then
                                                         Continue For
@@ -3921,9 +3937,11 @@ Public Class FormMain
                                                             End If
                                                         End If
                                                     End If
-                                                    xlWorkSheet.Rows(idxRow).RowHeight = 30
+                                                    'xlWorkSheet.Rows(idxRow).RowHeight = 30
+                                                    xlWorkSheet.Rows(idxRow).RowHeight = 18
                                                     xlWorkSheet.Cells(idxRow, idxColonna) = strOutVal
                                                     xlWorkSheet.Cells(idxRow, idxColonna).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
+                                                    xlWorkSheet.Cells(idxRow, idxColonna).Font.size = 9
 
                                                     idxColonna = idxColonna + 1
                                                     Application.DoEvents()
@@ -4023,14 +4041,17 @@ Public Class FormMain
                                             End If
 
                                             idxRow = idxRow + 2
-                                            xlWorkSheet.Rows(idxRow).RowHeight = 30
+                                            'xlWorkSheet.Rows(idxRow).RowHeight = 30
+                                            xlWorkSheet.Rows(idxRow).RowHeight = 18
                                             xlWorkSheet.Cells(idxRow, 1) = LabelGiac
-                                            xlWorkSheet.Cells(idxRow, 2) = varTag(idxArt).UM
-                                            xlWorkSheet.Cells(idxRow, 3) = ricalcolatotaleGiacPerEsportazione(idxArt, idxVariante)
+                                            'xlWorkSheet.Cells(idxRow, 2) = varTag(idxArt).UM
+                                            xlWorkSheet.Cells(idxRow, 2) = ricalcolatotaleGiacPerEsportazione(idxArt, idxVariante)
 
                                             xlWorkSheet.Cells(idxRow, 1).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
                                             xlWorkSheet.Cells(idxRow, 2).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
-                                            xlWorkSheet.Cells(idxRow, 3).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
+                                            xlWorkSheet.Cells(idxRow, 2).font.bold = True
+                                            xlWorkSheet.Cells(idxRow, 2).Font.size = 9
+                                            'xlWorkSheet.Cells(idxRow, 3).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
                                         End If
                                     End If
                                 End If
@@ -4127,14 +4148,17 @@ Public Class FormMain
                                             End If
 
                                             idxRow = idxRow + 2
-                                            xlWorkSheet.Rows(idxRow).RowHeight = 30
+                                            'xlWorkSheet.Rows(idxRow).RowHeight = 30
+                                            xlWorkSheet.Rows(idxRow).RowHeight = 18
                                             xlWorkSheet.Cells(idxRow, 1) = labelCalc
-                                            xlWorkSheet.Cells(idxRow, 2) = varTag(idxArt).UM
-                                            xlWorkSheet.Cells(idxRow, 3) = ricalcolatotaleCalcPerEsportazione(idxArt, idxVariante)
+                                            'xlWorkSheet.Cells(idxRow, 2) = varTag(idxArt).UM
+                                            xlWorkSheet.Cells(idxRow, 2) = ricalcolatotaleCalcPerEsportazione(idxArt, idxVariante)
 
                                             xlWorkSheet.Cells(idxRow, 1).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
                                             xlWorkSheet.Cells(idxRow, 2).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
-                                            xlWorkSheet.Cells(idxRow, 3).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
+                                            xlWorkSheet.Cells(idxRow, 2).font.bold = True
+                                            xlWorkSheet.Cells(idxRow, 2).Font.size = 9
+                                            'xlWorkSheet.Cells(idxRow, 3).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
                                         End If
                                     End If
                                 End If
@@ -4245,7 +4269,6 @@ Public Class FormMain
                 Application.DoEvents()
             Next
 
-
             LabelDB.Text = "Creazione file in corso ..."
             Application.DoEvents()
 
@@ -4336,8 +4359,8 @@ Public Class FormMain
             'file = getTmpImagefilenameFromFile(file, largh, alt)
         End If
 
-        largh = 100
-        alt = 100
+        largh = 30
+        alt = 30
 
         'If FormExport.CheckBoxFormatoImgFisso.Checked = True Then
         '    largh = 100
@@ -4369,7 +4392,7 @@ Public Class FormMain
         'shp.Top = r.Top + (r.Height - shp.Height) / 2
 
         'shp.Left = r.Left + 10
-        shp.Top = r.Top + 10
+        shp.Top = r.Top + 2
 
     End Sub
 
