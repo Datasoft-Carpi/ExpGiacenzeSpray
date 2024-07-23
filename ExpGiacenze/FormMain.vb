@@ -133,6 +133,7 @@ Public Class FormMain
         Public DesMarca As String
         Public CodNomenclatura As String
         Public MadeIn As String
+        Public DesMadeIn As String
         Public DescrInglese As String
         Public CodVariante() As String
         Public Varianti() As String
@@ -283,7 +284,7 @@ Public Class FormMain
             SQL = SQL & " ModaTabComposizioni1.Descrizione_1 AS [DescrCompo1], "
             SQL = SQL & " ModaTabComposizioni2.Descrizione_1 AS [DescrCompo2], "
             SQL = SQL & " ArtDatiInLingua.DesEstesa AS [DescrizioneInglese], "
-
+            SQL = SQL & " ModaMadeIn.DescrMadeIn AS [DescrMadeIn], "
             SQL = SQL & " 1 AS [Contatore]"
             'SQL = SQL & ", ArtAnagrafica.StorSostDaCodArt AS [ArticoloSostitutivo] "
             SQL = SQL & " FROM ArtAnagrafica "
@@ -301,6 +302,9 @@ Public Class FormMain
 
             SQL = SQL & " LEFT OUTER JOIN Marche As [Marche] On (ArtAnagrafica.CodMarca = Marche.CodMarca And (Marche.DBGruppo=ArtAnagrafica.DBGruppo)) "
             SQL = SQL & " LEFT OUTER JOIN ModaTabellaLinee As [ModaTabellaLinee] On (ModaArticoli.CodLinea = ModaTabellaLinee.CodiceLinea And (ModaArticoli.DBGruppo=ModaTabellaLinee.DBGruppo)) "
+
+            SQL = SQL & " LEFT OUTER JOIN ModaMadeIn As [ModaMadeIn] On (ModaArticoli.ArtMadeIn = ModaMadeIn.CodiceMadeIn And (ModaArticoli.DBGruppo=ModaMadeIn.DBGruppo)) "
+
 
             SQL = SQL & " WHERE (ArtAnagrafica.TipoAnagr = 1) "
             SQL = SQL & " And (ArtAnagrafica.CodArt BETWEEN '" & CODARTICOLO_DA & "' AND '" & CODARTICOLO_A & "') "
@@ -490,6 +494,7 @@ Public Class FormMain
                 varTag(UBound(varTag) - 1).CodNomenclatura = getDbNullStr(rsGlobale.Fields("CodNomenclaturaComb").Value)
                 varTag(UBound(varTag) - 1).MadeIn = getDbNullStr(rsGlobale.Fields("ArtMadeIn").Value)
                 varTag(UBound(varTag) - 1).DescrInglese = getDbNullStr(rsGlobale.Fields("DescrizioneInglese").Value)
+                varTag(UBound(varTag) - 1).DesMadeIn = getDbNullStr(rsGlobale.Fields("DescrMadeIn").Value)
 
 
                 varTag(UBound(varTag) - 1).PrezzoLisAcq = 0
@@ -559,7 +564,7 @@ Public Class FormMain
         Dim strOggi As String = Format(Today, "yyyyMMdd")
         Dim rs As New ADODB.Recordset
         Dim SQL As String
-        Dim res As Double = 0
+        Dim res As Double = 0.00
 
         'SQL = "Select * from ListiniRigaArticolo "
         'SQL = SQL & " where 1=1"
@@ -3472,7 +3477,8 @@ Public Class FormMain
                             End If
                             If CODLIS_VEN <> "" Then
                                 If FormExport.CheckBoxExpLisVendita.Checked = True Then
-                                    strvAl += "Prezzo: " + vbCrLf + dr.Cells(5).Value.ToString & " Euro" & vbCrLf & vbCrLf
+                                    'strvAl += "Prezzo: " + vbCrLf + dr.Cells(5).Value.ToString & " Euro" & vbCrLf & vbCrLf
+                                    strvAl += vbCrLf + String.Format("{0:0.00}", dr.Cells(5).Value) & " Euro" & vbCrLf & vbCrLf
                                 End If
                             End If
                             xlWorkSheet.Cells(idxRow, 3) = strvAl
@@ -3552,7 +3558,7 @@ Public Class FormMain
                         xlWorkSheet.Cells(idxRow, 2).interior.color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCyan)
                         xlWorkSheet.Cells(idxRow, 2).font.bold = True
                         xlWorkSheet.Cells(idxRow, 2).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
-                        xlWorkSheet.Cells(idxRow, 2).HorizontalAlignment = Excel.Constants.xlCenter
+                        xlWorkSheet.Cells(idxRow, 2).HorizontalAlignment = Excel.Constants.xlLeft
                         xlWorkSheet.Cells(idxRow, 2).VerticalAlignment = Excel.Constants.xlCenter
 
                         'idxRow = idxRow + 1
@@ -3591,10 +3597,10 @@ Public Class FormMain
                             If FormExport.CheckBoxArtCodice.Checked = True Then
                                 If FormExport.CheckBoxLingua.Checked = True Then
                                     strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt & vbCrLf
-                                    strvAl += varTag(idxArt).DescrInglese
+                                    strvAl += varTag(idxArt).DescrInglese & vbCrLf & vbCrLf
                                 Else
                                     strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt & vbCrLf
-                                    strvAl += varTag(idxArt).DescEstesa
+                                    strvAl += varTag(idxArt).DescEstesa & vbCrLf & vbCrLf
                                 End If
                             End If
 
@@ -3621,9 +3627,11 @@ Public Class FormMain
                             'Marca
                             If FormExport.CheckBoxMarca.Checked = True Then
                                 If FormExport.CheckBoxLingua.Checked = True Then
-                                    strvAl += "LINEA: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
+                                    'strvAl += "LINEA: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
+                                    strvAl += "LINEA: " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
                                 Else
-                                    strvAl += "LINE: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
+                                    'strvAl += "LINE: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
+                                    strvAl += "LINE: " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
                                 End If
                             End If
 
@@ -3639,12 +3647,34 @@ Public Class FormMain
                             'MadeIn
                             If versione <> VER_35 Then
                                 If FormExport.CheckBoxMadeIn.Checked = True Then
-                                    strvAl += "MADE IN: " + varTag(idxArt).MadeIn & vbCrLf & vbCrLf
+                                    'strvAl += "MADE IN: " + varTag(idxArt).MadeIn & vbCrLf & vbCrLf
+                                    strvAl += "MADE IN: " + varTag(idxArt).DesMadeIn & vbCrLf
                                 End If
                             End If
 
                             xlWorkSheet.Cells(idxRow, 2) = strvAl
-                            xlWorkSheet.Range("B" & idxRow).ColumnWidth = 40
+                            xlWorkSheet.Range("B" & idxRow).ColumnWidth = 50
+
+                            If FormExport.CheckBoxArtCodice.Checked = True And FormExport.CheckBoxArtComposizione.Checked = True And FormExport.CheckBoxMadeIn.Checked = True Then
+                                xlWorkSheet.Range("B" & idxRow).RowHeight = 180
+
+                                If FormExport.CheckBoxArtStagione.Checked = True Then
+                                    xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                End If
+
+                                If FormExport.CheckBoxArtFamiglia.Checked = True Then
+                                    xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                End If
+
+                                If FormExport.CheckBoxMarca.Checked = True Then
+                                    xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                End If
+
+                                If FormExport.CheckBoxCodNomenclatura.Checked = True Then
+                                    xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                End If
+                            End If
+
                             xlWorkSheet.Cells(idxRow, 2).interior.color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCyan)
                             xlWorkSheet.Cells(idxRow, 2).VerticalAlignment = Excel.Constants.xlCenter
                             xlWorkSheet.Cells(idxRow, 2).HorizontalAlignment = Excel.Constants.xlLeft
@@ -3708,59 +3738,85 @@ Public Class FormMain
                                                 If (stampaTestata = True And testgiastampata = False) Then
                                                     If FormExport.CheckBoxArtCodice.Checked = True Then
                                                         If FormExport.CheckBoxLingua.Checked = True Then
-                                                            strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescrInglese & vbCrLf
+                                                            strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt & vbCrLf
+                                                            strvAl += varTag(idxArt).DescrInglese & vbCrLf & vbCrLf
                                                         Else
-                                                            strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt + " - " + varTag(idxArt).DescEstesa & vbCrLf
+                                                            strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt & vbCrLf
+                                                            strvAl += varTag(idxArt).DescEstesa & vbCrLf & vbCrLf
                                                         End If
                                                     End If
 
                                                     'Stagione
                                                     If FormExport.CheckBoxArtStagione.Checked = True Then
                                                         If FormExport.CheckBoxLingua.Checked = True Then
-                                                            strvAl += "SEASON: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf
+                                                            strvAl += "STAG: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf & vbCrLf
                                                         Else
-                                                            strvAl += "STAG: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf
+                                                            strvAl += "SEASON: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf & vbCrLf
                                                         End If
 
                                                     End If
 
                                                     'Famiglia
                                                     If FormExport.CheckBoxArtFamiglia.Checked = True Then
-                                                        strvAl += "FAM: " + varTag(idxArt).Famiglia & vbCrLf
+                                                        strvAl += "FAM: " + varTag(idxArt).Famiglia & vbCrLf & vbCrLf
                                                     End If
 
                                                     'Famiglia
                                                     If FormExport.CheckBoxArtComposizione.Checked = True Then
-                                                        strvAl += "COMP: " + varTag(idxArt).Composizione & vbCrLf
+                                                        strvAl += "COMP: " + varTag(idxArt).Composizione & vbCrLf & vbCrLf
                                                     End If
 
                                                     'Marca
                                                     If FormExport.CheckBoxMarca.Checked = True Then
                                                         If FormExport.CheckBoxLingua.Checked = True Then
-                                                            strvAl += "LINE: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf
+                                                            'strvAl += "LINEA: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
+                                                            strvAl += "LINEA: " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
                                                         Else
-                                                            strvAl += "LINEA: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf
+                                                            'strvAl += "LINE: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
+                                                            strvAl += "LINE: " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
                                                         End If
                                                     End If
 
                                                     'Nomenclatura
                                                     If FormExport.CheckBoxCodNomenclatura.Checked = True Then
                                                         If FormExport.CheckBoxLingua.Checked = True Then
-                                                            strvAl += "HS CODE: " + varTag(idxArt).CodNomenclatura & vbCrLf
+                                                            strvAl += "COD NOMENCLATURA: " + varTag(idxArt).CodNomenclatura & vbCrLf & vbCrLf
                                                         Else
-                                                            strvAl += "COD NOMENCLATURA: " + varTag(idxArt).CodNomenclatura & vbCrLf
+                                                            strvAl += "HTS CODE: " + varTag(idxArt).CodNomenclatura & vbCrLf & vbCrLf
                                                         End If
                                                     End If
 
                                                     'MadeIn
                                                     If versione <> VER_35 Then
                                                         If FormExport.CheckBoxMadeIn.Checked = True Then
-                                                            strvAl += "MADE IN: " + varTag(idxArt).MadeIn & vbCrLf
+                                                            'strvAl += "MADE IN: " + varTag(idxArt).MadeIn & vbCrLf & vbCrLf
+                                                            strvAl += "MADE IN: " + varTag(idxArt).DesMadeIn & vbCrLf
                                                         End If
                                                     End If
 
                                                     xlWorkSheet.Cells(idxRow, 2) = strvAl
-                                                    xlWorkSheet.Range("B" & idxRow).ColumnWidth = 40
+                                                    xlWorkSheet.Range("B" & idxRow).ColumnWidth = 50
+
+                                                    If FormExport.CheckBoxArtCodice.Checked = True And FormExport.CheckBoxArtComposizione.Checked = True And FormExport.CheckBoxMadeIn.Checked = True Then
+                                                        xlWorkSheet.Range("B" & idxRow).RowHeight = 180
+
+                                                        If FormExport.CheckBoxArtStagione.Checked = True Then
+                                                            xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                                        End If
+
+                                                        If FormExport.CheckBoxArtFamiglia.Checked = True Then
+                                                            xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                                        End If
+
+                                                        If FormExport.CheckBoxMarca.Checked = True Then
+                                                            xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                                        End If
+
+                                                        If FormExport.CheckBoxCodNomenclatura.Checked = True Then
+                                                            xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                                        End If
+                                                    End If
+
                                                     xlWorkSheet.Cells(idxRow, 2).interior.color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCyan)
                                                     xlWorkSheet.Cells(idxRow, 2).VerticalAlignment = Excel.Constants.xlCenter
                                                     xlWorkSheet.Cells(idxRow, 2).HorizontalAlignment = Excel.Constants.xlLeft
@@ -3841,59 +3897,85 @@ Public Class FormMain
                                                     strvAl = ""
                                                     If FormExport.CheckBoxArtCodice.Checked = True Then
                                                         If FormExport.CheckBoxLingua.Checked = True Then
-                                                            strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescrInglese & vbCrLf
+                                                            strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt & vbCrLf
+                                                            strvAl += varTag(idxArt).DescrInglese & vbCrLf & vbCrLf
                                                         Else
-                                                            strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt + " - " + varTag(idxArt).DescEstesa & vbCrLf
+                                                            strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt & vbCrLf
+                                                            strvAl += varTag(idxArt).DescEstesa & vbCrLf & vbCrLf
                                                         End If
                                                     End If
 
                                                     'Stagione
                                                     If FormExport.CheckBoxArtStagione.Checked = True Then
                                                         If FormExport.CheckBoxLingua.Checked = True Then
-                                                            strvAl += "SEASON: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf
+                                                            strvAl += "STAG: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf & vbCrLf
                                                         Else
-                                                            strvAl += "STAG: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf
+                                                            strvAl += "SEASON: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf & vbCrLf
                                                         End If
 
                                                     End If
 
                                                     'Famiglia
                                                     If FormExport.CheckBoxArtFamiglia.Checked = True Then
-                                                        strvAl += "FAM: " + varTag(idxArt).Famiglia & vbCrLf
+                                                        strvAl += "FAM: " + varTag(idxArt).Famiglia & vbCrLf & vbCrLf
                                                     End If
 
                                                     'Famiglia
                                                     If FormExport.CheckBoxArtComposizione.Checked = True Then
-                                                        strvAl += "COMP: " + varTag(idxArt).Composizione & vbCrLf
+                                                        strvAl += "COMP: " + varTag(idxArt).Composizione & vbCrLf & vbCrLf
                                                     End If
 
                                                     'Marca
                                                     If FormExport.CheckBoxMarca.Checked = True Then
                                                         If FormExport.CheckBoxLingua.Checked = True Then
-                                                            strvAl += "LINE: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf
+                                                            'strvAl += "LINEA: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
+                                                            strvAl += "LINEA: " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
                                                         Else
-                                                            strvAl += "LINEA: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf
+                                                            'strvAl += "LINE: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
+                                                            strvAl += "LINE: " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
                                                         End If
                                                     End If
 
                                                     'Nomenclatura
                                                     If FormExport.CheckBoxCodNomenclatura.Checked = True Then
                                                         If FormExport.CheckBoxLingua.Checked = True Then
-                                                            strvAl += "HS CODE: " + varTag(idxArt).CodNomenclatura & vbCrLf
+                                                            strvAl += "COD NOMENCLATURA: " + varTag(idxArt).CodNomenclatura & vbCrLf & vbCrLf
                                                         Else
-                                                            strvAl += "COD NOMENCLATURA: " + varTag(idxArt).CodNomenclatura & vbCrLf
+                                                            strvAl += "HTS CODE: " + varTag(idxArt).CodNomenclatura & vbCrLf & vbCrLf
                                                         End If
                                                     End If
 
                                                     'MadeIn
                                                     If versione <> VER_35 Then
                                                         If FormExport.CheckBoxMadeIn.Checked = True Then
-                                                            strvAl += "MADE IN: " + varTag(idxArt).MadeIn & vbCrLf
+                                                            'strvAl += "MADE IN: " + varTag(idxArt).MadeIn & vbCrLf & vbCrLf
+                                                            strvAl += "MADE IN: " + varTag(idxArt).DesMadeIn & vbCrLf
                                                         End If
                                                     End If
 
                                                     xlWorkSheet.Cells(idxRow, 2) = strvAl
-                                                    xlWorkSheet.Range("B" & idxRow).ColumnWidth = 40
+                                                    xlWorkSheet.Range("B" & idxRow).ColumnWidth = 50
+
+                                                    If FormExport.CheckBoxArtCodice.Checked = True And FormExport.CheckBoxArtComposizione.Checked = True And FormExport.CheckBoxMadeIn.Checked = True Then
+                                                        xlWorkSheet.Range("B" & idxRow).RowHeight = 180
+
+                                                        If FormExport.CheckBoxArtStagione.Checked = True Then
+                                                            xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                                        End If
+
+                                                        If FormExport.CheckBoxArtFamiglia.Checked = True Then
+                                                            xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                                        End If
+
+                                                        If FormExport.CheckBoxMarca.Checked = True Then
+                                                            xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                                        End If
+
+                                                        If FormExport.CheckBoxCodNomenclatura.Checked = True Then
+                                                            xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                                        End If
+                                                    End If
+
                                                     xlWorkSheet.Cells(idxRow, 2).interior.color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCyan)
                                                     xlWorkSheet.Cells(idxRow, 2).VerticalAlignment = Excel.Constants.xlCenter
                                                     xlWorkSheet.Cells(idxRow, 2).HorizontalAlignment = Excel.Constants.xlLeft
@@ -3976,60 +4058,86 @@ Public Class FormMain
                                                 strvAl = ""
                                                 If FormExport.CheckBoxArtCodice.Checked = True Then
                                                     If FormExport.CheckBoxLingua.Checked = True Then
-                                                        strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescrInglese & vbCrLf
+                                                        strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt & vbCrLf
+                                                        strvAl += varTag(idxArt).DescrInglese & vbCrLf & vbCrLf
                                                     Else
-                                                        strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt + " - " + varTag(idxArt).DescEstesa & vbCrLf
+                                                        strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt & vbCrLf
+                                                        strvAl += varTag(idxArt).DescEstesa & vbCrLf & vbCrLf
                                                     End If
                                                 End If
 
                                                 'Stagione
                                                 If FormExport.CheckBoxArtStagione.Checked = True Then
                                                     If FormExport.CheckBoxLingua.Checked = True Then
-                                                        strvAl += "SEASON: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf
+                                                        strvAl += "STAG: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf & vbCrLf
                                                     Else
-                                                        strvAl += "STAG: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf
+                                                        strvAl += "SEASON: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf & vbCrLf
                                                     End If
 
                                                 End If
 
                                                 'Famiglia
                                                 If FormExport.CheckBoxArtFamiglia.Checked = True Then
-                                                    strvAl += "FAM: " + varTag(idxArt).Famiglia & vbCrLf
+                                                    strvAl += "FAM: " + varTag(idxArt).Famiglia & vbCrLf & vbCrLf
                                                 End If
 
                                                 'Famiglia
                                                 If FormExport.CheckBoxArtComposizione.Checked = True Then
-                                                    strvAl += "COMP: " + varTag(idxArt).Composizione & vbCrLf
+                                                    strvAl += "COMP: " + varTag(idxArt).Composizione & vbCrLf & vbCrLf
                                                 End If
 
                                                 'Marca
                                                 If FormExport.CheckBoxMarca.Checked = True Then
                                                     If FormExport.CheckBoxLingua.Checked = True Then
-                                                        strvAl += "LINE: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf
+                                                        'strvAl += "LINEA: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
+                                                        strvAl += "LINEA: " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
                                                     Else
-                                                        strvAl += "LINEA: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf
+                                                        'strvAl += "LINE: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
+                                                        strvAl += "LINE: " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
                                                     End If
                                                 End If
 
                                                 'Nomenclatura
                                                 If FormExport.CheckBoxCodNomenclatura.Checked = True Then
                                                     If FormExport.CheckBoxLingua.Checked = True Then
-                                                        strvAl += "HS CODE: " + varTag(idxArt).CodNomenclatura & vbCrLf
+                                                        strvAl += "COD NOMENCLATURA: " + varTag(idxArt).CodNomenclatura & vbCrLf & vbCrLf
                                                     Else
-                                                        strvAl += "COD NOMENCLATURA: " + varTag(idxArt).CodNomenclatura & vbCrLf
+                                                        strvAl += "HTS CODE: " + varTag(idxArt).CodNomenclatura & vbCrLf & vbCrLf
                                                     End If
                                                 End If
 
                                                 'MadeIn
                                                 If versione <> VER_35 Then
                                                     If FormExport.CheckBoxMadeIn.Checked = True Then
-                                                        strvAl += "MADE IN: " + varTag(idxArt).MadeIn & vbCrLf
+                                                        'strvAl += "MADE IN: " + varTag(idxArt).MadeIn & vbCrLf & vbCrLf
+                                                        strvAl += "MADE IN: " + varTag(idxArt).DesMadeIn & vbCrLf
                                                     End If
                                                 End If
 
 
                                                 xlWorkSheet.Cells(idxRow, 2) = strvAl
-                                                xlWorkSheet.Range("B" & idxRow).ColumnWidth = 40
+                                                xlWorkSheet.Range("B" & idxRow).ColumnWidth = 50
+
+                                                If FormExport.CheckBoxArtCodice.Checked = True And FormExport.CheckBoxArtComposizione.Checked = True And FormExport.CheckBoxMadeIn.Checked = True Then
+                                                    xlWorkSheet.Range("B" & idxRow).RowHeight = 180
+
+                                                    If FormExport.CheckBoxArtStagione.Checked = True Then
+                                                        xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                                    End If
+
+                                                    If FormExport.CheckBoxArtFamiglia.Checked = True Then
+                                                        xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                                    End If
+
+                                                    If FormExport.CheckBoxMarca.Checked = True Then
+                                                        xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                                    End If
+
+                                                    If FormExport.CheckBoxCodNomenclatura.Checked = True Then
+                                                        xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                                    End If
+                                                End If
+
                                                 xlWorkSheet.Cells(idxRow, 2).interior.color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCyan)
                                                 xlWorkSheet.Cells(idxRow, 2).VerticalAlignment = Excel.Constants.xlCenter
                                                 xlWorkSheet.Cells(idxRow, 2).HorizontalAlignment = Excel.Constants.xlLeft
@@ -4084,59 +4192,85 @@ Public Class FormMain
                                                 strvAl = ""
                                                 If FormExport.CheckBoxArtCodice.Checked = True Then
                                                     If FormExport.CheckBoxLingua.Checked = True Then
-                                                        strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescrInglese & vbCrLf
+                                                        strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt & vbCrLf
+                                                        strvAl += varTag(idxArt).DescrInglese & vbCrLf & vbCrLf
                                                     Else
-                                                        strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt + " - " + varTag(idxArt).DescEstesa & vbCrLf
+                                                        strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt & vbCrLf
+                                                        strvAl += varTag(idxArt).DescEstesa & vbCrLf & vbCrLf
                                                     End If
                                                 End If
 
                                                 'Stagione
                                                 If FormExport.CheckBoxArtStagione.Checked = True Then
                                                     If FormExport.CheckBoxLingua.Checked = True Then
-                                                        strvAl += "SEASON: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf
+                                                        strvAl += "STAG: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf & vbCrLf
                                                     Else
-                                                        strvAl += "STAG: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf
+                                                        strvAl += "SEASON: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf & vbCrLf
                                                     End If
 
                                                 End If
 
                                                 'Famiglia
                                                 If FormExport.CheckBoxArtFamiglia.Checked = True Then
-                                                    strvAl += "FAM: " + varTag(idxArt).Famiglia & vbCrLf
+                                                    strvAl += "FAM: " + varTag(idxArt).Famiglia & vbCrLf & vbCrLf
                                                 End If
 
                                                 'Famiglia
                                                 If FormExport.CheckBoxArtComposizione.Checked = True Then
-                                                    strvAl += "COMP: " + varTag(idxArt).Composizione & vbCrLf
+                                                    strvAl += "COMP: " + varTag(idxArt).Composizione & vbCrLf & vbCrLf
                                                 End If
 
                                                 'Marca
                                                 If FormExport.CheckBoxMarca.Checked = True Then
                                                     If FormExport.CheckBoxLingua.Checked = True Then
-                                                        strvAl += "LINE: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf
+                                                        'strvAl += "LINEA: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
+                                                        strvAl += "LINEA: " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
                                                     Else
-                                                        strvAl += "LINEA: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf
+                                                        'strvAl += "LINE: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
+                                                        strvAl += "LINE: " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
                                                     End If
                                                 End If
 
                                                 'Nomenclatura
                                                 If FormExport.CheckBoxCodNomenclatura.Checked = True Then
                                                     If FormExport.CheckBoxLingua.Checked = True Then
-                                                        strvAl += "HS CODE: " + varTag(idxArt).CodNomenclatura & vbCrLf
+                                                        strvAl += "COD NOMENCLATURA: " + varTag(idxArt).CodNomenclatura & vbCrLf & vbCrLf
                                                     Else
-                                                        strvAl += "COD NOMENCLATURA: " + varTag(idxArt).CodNomenclatura & vbCrLf
+                                                        strvAl += "HTS CODE: " + varTag(idxArt).CodNomenclatura & vbCrLf & vbCrLf
                                                     End If
                                                 End If
 
                                                 'MadeIn
                                                 If versione <> VER_35 Then
                                                     If FormExport.CheckBoxMadeIn.Checked = True Then
-                                                        strvAl += "MADE IN: " + varTag(idxArt).MadeIn & vbCrLf
+                                                        'strvAl += "MADE IN: " + varTag(idxArt).MadeIn & vbCrLf & vbCrLf
+                                                        strvAl += "MADE IN: " + varTag(idxArt).DesMadeIn & vbCrLf
                                                     End If
                                                 End If
 
                                                 xlWorkSheet.Cells(idxRow, 2) = strvAl
-                                                xlWorkSheet.Range("B" & idxRow).ColumnWidth = 40
+                                                xlWorkSheet.Range("B" & idxRow).ColumnWidth = 50
+
+                                                If FormExport.CheckBoxArtCodice.Checked = True And FormExport.CheckBoxArtComposizione.Checked = True And FormExport.CheckBoxMadeIn.Checked = True Then
+                                                    xlWorkSheet.Range("B" & idxRow).RowHeight = 180
+
+                                                    If FormExport.CheckBoxArtStagione.Checked = True Then
+                                                        xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                                    End If
+
+                                                    If FormExport.CheckBoxArtFamiglia.Checked = True Then
+                                                        xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                                    End If
+
+                                                    If FormExport.CheckBoxMarca.Checked = True Then
+                                                        xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                                    End If
+
+                                                    If FormExport.CheckBoxCodNomenclatura.Checked = True Then
+                                                        xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                                    End If
+                                                End If
+
                                                 xlWorkSheet.Cells(idxRow, 2).interior.color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCyan)
                                                 xlWorkSheet.Cells(idxRow, 2).VerticalAlignment = Excel.Constants.xlCenter
                                                 xlWorkSheet.Cells(idxRow, 2).HorizontalAlignment = Excel.Constants.xlLeft
@@ -4182,59 +4316,85 @@ Public Class FormMain
                                 strvAl = ""
                                 If FormExport.CheckBoxArtCodice.Checked = True Then
                                     If FormExport.CheckBoxLingua.Checked = True Then
-                                        strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescrInglese & vbCrLf
+                                        strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt & vbCrLf
+                                        strvAl += varTag(idxArt).DescrInglese & vbCrLf & vbCrLf
                                     Else
-                                        strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt + " - " + varTag(idxArt).DescEstesa & vbCrLf
+                                        strvAl += "ART: " + varTag(idxArt).CodArt + " - " + varTag(idxArt).DescArt & vbCrLf
+                                        strvAl += varTag(idxArt).DescEstesa & vbCrLf & vbCrLf
                                     End If
                                 End If
 
                                 'Stagione
                                 If FormExport.CheckBoxArtStagione.Checked = True Then
                                     If FormExport.CheckBoxLingua.Checked = True Then
-                                        strvAl += "SEASON: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf
+                                        strvAl += "STAG: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf & vbCrLf
                                     Else
-                                        strvAl += "STAG: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf
+                                        strvAl += "SEASON: " + varTag(idxArt).CodStag & " - " & varTag(idxArt).DescStag & vbCrLf & vbCrLf
                                     End If
 
                                 End If
 
                                 'Famiglia
                                 If FormExport.CheckBoxArtFamiglia.Checked = True Then
-                                    strvAl += "FAM: " + varTag(idxArt).Famiglia & vbCrLf
+                                    strvAl += "FAM: " + varTag(idxArt).Famiglia & vbCrLf & vbCrLf
                                 End If
 
                                 'Famiglia
                                 If FormExport.CheckBoxArtComposizione.Checked = True Then
-                                    strvAl += "COMP: " + varTag(idxArt).Composizione & vbCrLf
+                                    strvAl += "COMP: " + varTag(idxArt).Composizione & vbCrLf & vbCrLf
                                 End If
 
                                 'Marca
                                 If FormExport.CheckBoxMarca.Checked = True Then
                                     If FormExport.CheckBoxLingua.Checked = True Then
-                                        strvAl += "LINE: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf
+                                        'strvAl += "LINEA: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
+                                        strvAl += "LINEA: " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
                                     Else
-                                        strvAl += "LINEA: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf
+                                        'strvAl += "LINE: " + varTag(idxArt).CodMarca + " - " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
+                                        strvAl += "LINE: " + varTag(idxArt).DesMarca & vbCrLf & vbCrLf
                                     End If
                                 End If
 
                                 'Nomenclatura
                                 If FormExport.CheckBoxCodNomenclatura.Checked = True Then
                                     If FormExport.CheckBoxLingua.Checked = True Then
-                                        strvAl += "HS CODE: " + varTag(idxArt).CodNomenclatura & vbCrLf
+                                        strvAl += "COD NOMENCLATURA: " + varTag(idxArt).CodNomenclatura & vbCrLf & vbCrLf
                                     Else
-                                        strvAl += "COD NOMENCLATURA: " + varTag(idxArt).CodNomenclatura & vbCrLf
+                                        strvAl += "HTS CODE: " + varTag(idxArt).CodNomenclatura & vbCrLf & vbCrLf
                                     End If
                                 End If
 
                                 'MadeIn
                                 If versione <> VER_35 Then
                                     If FormExport.CheckBoxMadeIn.Checked = True Then
-                                        strvAl += "MADE IN: " + varTag(idxArt).MadeIn & vbCrLf
+                                        'strvAl += "MADE IN: " + varTag(idxArt).MadeIn & vbCrLf & vbCrLf
+                                        strvAl += "MADE IN: " + varTag(idxArt).DesMadeIn & vbCrLf
                                     End If
                                 End If
 
                                 xlWorkSheet.Cells(idxRow, 2) = strvAl
-                                xlWorkSheet.Range("B" & idxRow).ColumnWidth = 40
+                                xlWorkSheet.Range("B" & idxRow).ColumnWidth = 50
+
+                                If FormExport.CheckBoxArtCodice.Checked = True And FormExport.CheckBoxArtComposizione.Checked = True And FormExport.CheckBoxMadeIn.Checked = True Then
+                                    xlWorkSheet.Range("B" & idxRow).RowHeight = 180
+
+                                    If FormExport.CheckBoxArtStagione.Checked = True Then
+                                        xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                    End If
+
+                                    If FormExport.CheckBoxArtFamiglia.Checked = True Then
+                                        xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                    End If
+
+                                    If FormExport.CheckBoxMarca.Checked = True Then
+                                        xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                    End If
+
+                                    If FormExport.CheckBoxCodNomenclatura.Checked = True Then
+                                        xlWorkSheet.Range("B" & idxRow).RowHeight = xlWorkSheet.Range("B" & idxRow).RowHeight + 25
+                                    End If
+                                End If
+
                                 xlWorkSheet.Cells(idxRow, 2).interior.color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCyan)
                                 xlWorkSheet.Cells(idxRow, 2).VerticalAlignment = Excel.Constants.xlCenter
                                 xlWorkSheet.Cells(idxRow, 2).HorizontalAlignment = Excel.Constants.xlLeft
