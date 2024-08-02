@@ -1995,7 +1995,6 @@ Public Class FormMain
         Dim escludiTg() As String
         Dim idxArticolo As Integer = 1
 
-
         strPathTmp = tmp_dir
 
 
@@ -3218,7 +3217,7 @@ Public Class FormMain
         Dim idxArticolo As Integer = 1
         Dim MaxWidth As Integer = 0
 
-
+        Dim taglieValide() As String
 
         Dim xlApp As Excel.Application
         Dim xlWorkBook As Excel.Workbook
@@ -3697,6 +3696,10 @@ Public Class FormMain
                                         Continue For
                                     End If
 
+                                    If varTag(idxArt).Giacenze(idxVariante).TagValide(idxTaglia) = 0 Then
+                                        Continue For
+                                    End If
+
                                     If bTaglieSempre = True Or indexPrimaRigaTaglia = 0 Then
                                         xlWorkSheet.Cells(idxRow, idxColonna) = varTag(idxArt).Giacenze(idxVariante).Taglie(idxTaglia).ToString
 
@@ -3844,6 +3847,10 @@ Public Class FormMain
                                                 idxColonna = 4
                                                 For idxTaglia = 0 To UBound(varTag(idxArt).Giacenze(0).Giacenze) - 1
                                                     If Array.IndexOf(escludiTg, varTag(idxArt).Giacenze(idxVariante).Taglie(idxTaglia).ToString) >= 0 Then
+                                                        Continue For
+                                                    End If
+
+                                                    If varTag(idxArt).Giacenze(idxVariante).TagValide(idxTaglia) = 0 Then
                                                         Continue For
                                                     End If
 
@@ -4006,6 +4013,11 @@ Public Class FormMain
                                                     If Array.IndexOf(escludiTg, varTag(idxArt).Giacenze(idxVariante).Taglie(idxTaglia).ToString) >= 0 Then
                                                         Continue For
                                                     End If
+
+                                                    If varTag(idxArt).Giacenze(idxVariante).TagValide(idxTaglia) = 0 Then
+                                                        Continue For
+                                                    End If
+
                                                     strOutVal = ""
                                                     If varTag(idxArt).Giacenze(idxVariante).Calcolato(idxTaglia) <> 0 Then
                                                         strOutVal = varTag(idxArt).Giacenze(idxVariante).Calcolato(idxTaglia).ToString
