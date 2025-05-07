@@ -57,8 +57,8 @@ Public Class FormMain
     Dim oldCellvalue As String
 
     Dim FLAG_ORDINATO = "1"
-    Dim CODARTICOLO_DA = ""
-    Dim CODARTICOLO_A = "ZZZZ"
+    Dim CODARTICOLO_DA = "A242"
+    Dim CODARTICOLO_A = "A242ZZZZ"
     Dim CODMARCA_DA = ""
     Dim FAMIGLIA_DA = ""
 
@@ -72,14 +72,14 @@ Public Class FormMain
     Dim CODFOR = "0"
     Dim CODAGE = "0"
     Dim CODZON = ""
-    Dim CODMAGAZZINO = "('P006')"
+    Dim CODMAGAZZINO = "('P000','P001','P004','P006')"
     Dim LISTAMAGAZZINI = ""
-    Dim CODMAGAZZINO1 = ""
+    Dim CODMAGAZZINO1 = "P000"
     Dim CODMAGAZZINO2 = ""
     Dim CODMAGAZZINO3 = ""
     Dim CODMAGAZZINO4 = ""
     Dim CODMAGAZZINO5 = ""
-    Dim CODGRUPPO = "AR"
+    Dim CODGRUPPO = "AL"
     Dim CODUTEPERS = ""
     Dim codStatDA(20) As String
     Dim codStatA(20) As String
@@ -354,7 +354,6 @@ Public Class FormMain
             Catch ex As Exception
                 Clipboard.SetText(SQL)
                 MsgBox(ex.Message)
-                'MsgBox(SQL & "   ----PopolaGriglia")
             End Try
 
         Else
@@ -2718,8 +2717,8 @@ Public Class FormMain
         Dim sb As System.Text.StringBuilder
         Dim Sezione As String = "FILTRI"
         Dim Sezione_Server As String = "SERVER"
-        Dim server As String = "MONICAGIO-WIN7\SISTEMI"
-        Dim DB As String = "Esmoda38"
+        Dim server As String = "DSOFT06\SISTEMI"
+        Dim DB As String = "ESOLVER_SPRAY"
         Dim user As String = "sa"
         Dim psw As String = "Sistemi123"
         Dim i As Integer
@@ -3483,7 +3482,7 @@ Public Class FormMain
                             xlWorkSheet.Cells(idxRow, 3) = strvAl
                             xlWorkSheet.Cells(idxRow, 3).interior.color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCyan)
                             xlWorkSheet.Cells(idxRow, 3).VerticalAlignment = Excel.Constants.xlCenter
-                            xlWorkSheet.Cells(idxRow, 3).HorizontalAlignment = Excel.Constants.xlLeft
+                            xlWorkSheet.Cells(idxRow, 3).HorizontalAlignment = Excel.Constants.xlCenter
                             xlWorkSheet.Cells(idxRow, 3).font.bold = True
                             xlWorkSheet.Cells(idxRow, 3).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
 
@@ -3702,12 +3701,13 @@ Public Class FormMain
 
                                     If bTaglieSempre = True Or indexPrimaRigaTaglia = 0 Then
                                         xlWorkSheet.Cells(idxRow, idxColonna) = varTag(idxArt).Giacenze(idxVariante).Taglie(idxTaglia).ToString
-
                                     Else
                                         xlWorkSheet.Cells(idxRow, idxColonna) = ""
                                     End If
+
                                     'xlWorkSheet.Rows(idxRow).RowHeight = 120
                                     xlWorkSheet.Rows(idxRow).RowHeight = 35
+                                    xlWorkSheet.Rows(idxRow).ColumnWidth = 4
                                     'xlWorkSheet.Cells(idxRow, idxColonna).interior.color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCyan)
                                     xlWorkSheet.Cells(idxRow, idxColonna).font.bold = True
                                     xlWorkSheet.Cells(idxRow, idxColonna).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
@@ -3843,6 +3843,8 @@ Public Class FormMain
                                                 xlWorkSheet.Cells(idxRow, 3).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
                                                 xlWorkSheet.Cells(idxRow, 3).font.bold = True
                                                 xlWorkSheet.Cells(idxRow, 3).Font.size = 9
+                                                xlWorkSheet.Cells(idxRow, 3).VerticalAlignment = Excel.Constants.xlCenter
+                                                xlWorkSheet.Cells(idxRow, 3).HorizontalAlignment = Excel.Constants.xlCenter
 
                                                 idxColonna = 4
                                                 For idxTaglia = 0 To UBound(varTag(idxArt).Giacenze(0).Giacenze) - 1
@@ -3874,6 +3876,8 @@ Public Class FormMain
                                                     xlWorkSheet.Cells(idxRow, idxColonna) = strOutVal
                                                     xlWorkSheet.Cells(idxRow, idxColonna).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
                                                     xlWorkSheet.Cells(idxRow, idxColonna).Font.size = 9
+                                                    xlWorkSheet.Cells(idxRow, idxColonna).VerticalAlignment = Excel.Constants.xlCenter
+                                                    xlWorkSheet.Cells(idxRow, idxColonna).HorizontalAlignment = Excel.Constants.xlCenter
 
                                                     idxColonna = idxColonna + 1
                                                     Application.DoEvents()
@@ -4007,6 +4011,9 @@ Public Class FormMain
                                                 xlWorkSheet.Cells(idxRow, 3).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
                                                 xlWorkSheet.Cells(idxRow, 3).font.bold = True
                                                 xlWorkSheet.Cells(idxRow, 3).Font.size = 9
+                                                xlWorkSheet.Cells(idxRow, 3).VerticalAlignment = Excel.Constants.xlCenter
+                                                xlWorkSheet.Cells(idxRow, 3).HorizontalAlignment = Excel.Constants.xlCenter
+
 
                                                 idxColonna = 4
                                                 For idxTaglia = 0 To UBound(varTag(idxArt).Giacenze(0).Calcolato) - 1
@@ -4036,6 +4043,8 @@ Public Class FormMain
                                                     xlWorkSheet.Cells(idxRow, idxColonna) = strOutVal
                                                     xlWorkSheet.Cells(idxRow, idxColonna).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
                                                     xlWorkSheet.Cells(idxRow, idxColonna).Font.size = 9
+                                                    xlWorkSheet.Cells(idxRow, idxColonna).VerticalAlignment = Excel.Constants.xlCenter
+                                                    xlWorkSheet.Cells(idxRow, idxColonna).HorizontalAlignment = Excel.Constants.xlCenter
 
                                                     idxColonna = idxColonna + 1
                                                     Application.DoEvents()
@@ -4171,6 +4180,8 @@ Public Class FormMain
                                             xlWorkSheet.Cells(idxRow, 2).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
                                             xlWorkSheet.Cells(idxRow, 2).font.bold = True
                                             xlWorkSheet.Cells(idxRow, 2).Font.size = 9
+                                            xlWorkSheet.Cells(idxRow, 2).VerticalAlignment = Excel.Constants.xlCenter
+                                            xlWorkSheet.Cells(idxRow, 2).HorizontalAlignment = Excel.Constants.xlCenter
                                             'xlWorkSheet.Cells(idxRow, 3).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
                                         End If
                                     End If
@@ -4304,6 +4315,8 @@ Public Class FormMain
                                             xlWorkSheet.Cells(idxRow, 2).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
                                             xlWorkSheet.Cells(idxRow, 2).font.bold = True
                                             xlWorkSheet.Cells(idxRow, 2).Font.size = 9
+                                            xlWorkSheet.Cells(idxRow, 2).VerticalAlignment = Excel.Constants.xlCenter
+                                            xlWorkSheet.Cells(idxRow, 2).HorizontalAlignment = Excel.Constants.xlCenter
                                             'xlWorkSheet.Cells(idxRow, 3).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
                                         End If
                                     End If
