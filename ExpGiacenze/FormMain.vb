@@ -3707,7 +3707,7 @@ Public Class FormMain
 
                                     'xlWorkSheet.Rows(idxRow).RowHeight = 120
                                     xlWorkSheet.Rows(idxRow).RowHeight = 35
-                                    xlWorkSheet.Rows(idxRow).ColumnWidth = 4
+
                                     'xlWorkSheet.Cells(idxRow, idxColonna).interior.color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.LightCyan)
                                     xlWorkSheet.Cells(idxRow, idxColonna).font.bold = True
                                     xlWorkSheet.Cells(idxRow, idxColonna).Borders.LineStyle = Excel.XlLineStyle.xlContinuous
@@ -3716,6 +3716,8 @@ Public Class FormMain
                                     xlWorkSheet.Cells(idxRow, idxColonna).VerticalAlignment = Excel.Constants.xlCenter
 
                                     xlWorkSheet.Cells(idxRow, idxColonna).Font.size = 9
+
+                                    xlWorkSheet.Cells(idxRow, idxColonna).ColumnWidth = 4
 
                                     idxColonna = idxColonna + 1
                                     Application.DoEvents()
