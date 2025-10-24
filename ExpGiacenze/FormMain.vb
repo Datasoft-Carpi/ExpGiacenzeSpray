@@ -57,8 +57,8 @@ Public Class FormMain
     Dim oldCellvalue As String
 
     Dim FLAG_ORDINATO = "1"
-    Dim CODARTICOLO_DA = "A242"
-    Dim CODARTICOLO_A = "A242ZZZZ"
+    Dim CODARTICOLO_DA = ""
+    Dim CODARTICOLO_A = "ZZZZZZZZ"
     Dim CODMARCA_DA = ""
     Dim FAMIGLIA_DA = ""
 
